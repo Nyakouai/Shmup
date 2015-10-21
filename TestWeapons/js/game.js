@@ -11,6 +11,8 @@ var currentWeapon = 0;
 var textBombs;
 var countBombs = 3;
 
+var textControls;
+
 
 function preload() {
     game.load.image('background','assets/back.png');
@@ -57,6 +59,7 @@ function create() {
     var changeKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     changeKey.onDown.add(nextWeapon, this);
 
+    textControls = game.add.text(500,10,'SPACEBAR: Shoot - ENTER: Change weapon',{font:'12px monospace',fill:'#fff'});
     textBombs = game.add.text(10,10,'Bombs : '+countBombs,{font:'12px monospace',fill:'#fff'});
 }
 
@@ -111,7 +114,11 @@ function update() {
 
 function render() {
     game.debug.body(player);
-    //game.debug.body(weapons[currentWeapon]);
+    /*
+    weapons[currentWeapon].forEach(function (bullet) {
+        game.debug.body(bullet);
+    });
+    */
 }
 
 function nextWeapon() {
