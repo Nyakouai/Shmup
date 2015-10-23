@@ -8,98 +8,82 @@
  * or revised without written permission of the authors.
 */
 
-window.onload = function() {
+BasicGame.Game = function (game) {
 
-        var game = new Phaser.Game(640, 480, Phaser.AUTO, '', 
-		{ preload: preload, create: create, update: update, render: render });
-		
-        function preload () {
-			game.load.image('player', 'App/Assets/player.png');
-            game.load.image('background', 'App/Assets/Background/test.png');
-			
-			game.load.image('interface', 'App/Assets/Interface/interface.png');
-			game.load.image('face', 'App/Assets/face.png');
+	var player;
+	//var ennemy = new Array();
+	
+	var gEnnemies;
+	
 
-			game.load.spritesheet('ennemy1', 'App/Assets/Ennemies/ennemy1.png', 89, 82, 4);
-			game.load.spritesheet('ennemy2', 'App/Assets/Ennemies/ennemy2.png', 59, 63, 2);
-			game.load.spritesheet('ennemy3', 'App/Assets/Ennemies/ennemy3.png', 76, 75, 2);
-			game.load.image('building1', 'App/Assets/Ennemies/building1.png');
-			
-			
-			game.load.image('bullet', 'App/Assets/Effects/shot.png');
-			game.load.image('ennemyBullet', 'App/Assets/Effects/ennemyShot.png');
-			//game.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png');
-        }
-		
-		var player;
-		//var ennemy = new Array();
-		
-		var gEnnemies;
-		
-		
-		var interfaceg;
-		var back;
-		var face;
-		
-		var score = 0;
-		var scoreText;
-		
-        function create () {
-			game.world.setBounds(0, 0, 640, 1440);
-			game.camera.y = 1440-480;
-			game.physics.startSystem(Phaser.Physics.ARCADE);
-			
-			back = game.add.tileSprite(0, 0, 640, 1440, 'background');
-			
-			player = new Player(game);
-			
-			gEnnemies = game.add.group();
-			gEnnemies.enableBody = true;
-			
-			new Ennemy(game, gEnnemies, 60, 0, 'ennemy1');
-			new Ennemy(game, gEnnemies, 20, 50, 'ennemy1');
-			new Ennemy(game, gEnnemies, 200, 100, 'ennemy2');
-			new Ennemy(game, gEnnemies, 400, 100, 'ennemy2');
-			new Ennemy(game, gEnnemies, 500, 50, 'ennemy3');
-			new Ennemy(game, gEnnemies, 550, 120, 'ennemy3');
-			
-			new Structure(game, gEnnemies, 300, 200, 'building1');
-			
-			//interfaceg = game.add.sprite(0, 380, 'interface');
-			//game.physics.arcade.enable(interfaceg);
-			//interfaceg.fixedToCamera = true;
+	var back;
+	
+	var score;
+	var scoreText;
+};
 
-			//face = game.add.sprite(12, 380+12, 'face');
-			//face.fixedToCamera = true;
-			
-			//scoreText = game.add.text(115, 380+10, 'score: 0', { fontSize: '32px', fill: '#000' });
-			//scoreText.fixedToCamera = true;
-		}
-		
-		function update () {
-			//back.tilePosition.y+=1;
-			game.camera.y -= 1;
-			
-			game.physics.arcade.collide(player.bullets, gEnnemies, collisionHandler, null, this)
+BasicGame.Game.prototype = {
 
-			player.update();
-			player.collide(game, game.camera);
-		}
-		
-		//  Called if the bullet hits one of the veg sprites
-		function collisionHandler (bullet, ennemy) {
-			bullet.kill();
-			ennemy.kill();
-			
-			score += 10;
-			//scoreText.text = 'Score: ' + score;
-		}
-		
-		function render() {
+  create: function () {
+	this.physics.startSystem(Phaser.Physics.ARCADE);
+	
+	back = this.add.tileSprite(0, 0, 640, 1440, 'background');
+	back.autoScroll(0, 50);
+	
+	player = new Player(this.game);
+	
+	gEnnemies = this.add.group();
+	gEnnemies.enableBody = true;
+	
+	new Ennemy(this, gEnnemies, 60, 50, 'ennemy1');
+	new Ennemy(this, gEnnemies, 20, 100, 'ennemy1');
+	new Ennemy(this, gEnnemies, 170, 150, 'ennemy2');
+	new Ennemy(this, gEnnemies, 230, 150, 'ennemy2');
+	new Ennemy(this, gEnnemies, 280, 50, 'ennemy3');
+	new Ennemy(this, gEnnemies, 330, 100, 'ennemy3');
 
-			game.debug.cameraInfo(game.camera, 32, 32);
+	new Ennemy(this, gEnnemies, 100, 350, 'ennemy2');
+	new Ennemy(this, gEnnemies, 300, 350, 'ennemy2');
 
-		}
+	
+	//new Structure(game, gEnnemies, 300, 200, 'building1');
+	
+	score=0;
+	scoreText = this.add.text(0, 720-40, 'score: 0', { fontSize: '32px', fill: '#000' });
+	
+  },
 
+  update: function () {
+	
+	this.physics.arcade.overlap(player.bullets, gEnnemies, this.collisionHandler, null, this)
 
-    };
+	player.update();
+
+  },
+
+  collisionHandler: function (bullet, ennemy) {
+	bullet.kill();
+	ennemy.kill();
+	
+	score += 10;
+	scoreText.text = 'Score: ' + score;
+	},
+
+  render: function () {
+
+		this.game.debug.cameraInfo(this.camera, 32, 32);
+		//this.game.debug.body(player.object);
+	},
+
+  quitGame: function (pointer) {
+
+    //  Here you should destroy anything you no longer need.
+    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
+
+    //  Then let's go back to the main menu.
+    //this.state.start('MainMenu');
+
+  }
+
+};
+
