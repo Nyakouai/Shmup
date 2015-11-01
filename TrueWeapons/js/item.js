@@ -26,8 +26,6 @@ var Collectible = {};
 Collectible.Powerup = function (game) {
 	Phaser.Group.call(this, game, game.world, 'Powerup', false, true, Phaser.Physics.ARCADE);
 
-	this.nextItem = 0;
-	this.itemRate = 1000;
 	this.itemSpeed = 100;
 
 	for (var i = 0; i < 20; i++)
@@ -42,14 +40,10 @@ Collectible.Powerup.prototype = Object.create(Phaser.Group.prototype);
 Collectible.Powerup.prototype.constructor = Collectible.Powerup;
 
 Collectible.Powerup.prototype.appear = function () {
-	//if (this.game.time.time < this.nextItem) { return; }
-
 	var x = game.rnd.integerInRange(20, 780);
 	var y = 0;
 
 	this.getFirstExists(false).appear(x,y,this.itemSpeed);
-
-    //this.nextItem = this.game.time.time + this.itemRate;
 }
 
 /* Bomb */
@@ -57,8 +51,6 @@ Collectible.Powerup.prototype.appear = function () {
 Collectible.Bomb = function (game) {
 	Phaser.Group.call(this, game, game.world, 'Bomb', false, true, Phaser.Physics.ARCADE);
 
-	this.nextItem = 0;
-	this.itemRate = 1000;
 	this.itemSpeed = 100;
 
 	for (var i = 0; i < 20; i++)
@@ -73,12 +65,8 @@ Collectible.Bomb.prototype = Object.create(Phaser.Group.prototype);
 Collectible.Bomb.prototype.constructor = Collectible.Bomb;
 
 Collectible.Bomb.prototype.appear = function () {
-	//if (this.game.time.time < this.nextItem) { return; }
-
 	var x = game.rnd.integerInRange(20, 780);
 	var y = 0;
 
 	this.getFirstExists(false).appear(x,y,this.itemSpeed);
-
-    //this.nextItem = this.game.time.time + this.itemRate;
 }

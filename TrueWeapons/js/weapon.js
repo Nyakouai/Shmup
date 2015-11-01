@@ -71,7 +71,7 @@ Weapon.BulletLvl3 = function (game) {
 
     this.nextFire = 0;
     this.bulletSpeed = 1000;
-    this.fireRate = 50;
+    this.fireRate = 75;
 
     for (var i = 0; i < 96; i++)
     {
@@ -90,8 +90,8 @@ Weapon.BulletLvl3.prototype.fire = function (source) {
     var x = source.x;
     var y = source.y;
 
-    this.getFirstExists(false).fire(x, y, -95, this.bulletSpeed, 0, 0);
-    this.getFirstExists(false).fire(x, y, -85, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, -98, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, -82, this.bulletSpeed, 0, 0);
     this.getFirstExists(false).fire(x, y, -90, this.bulletSpeed, 0, 0);
 
     this.nextFire = this.game.time.time + this.fireRate;
@@ -104,7 +104,7 @@ Weapon.Fireball = function (game) {
 
     this.nextFire = 0;
     this.bulletSpeed = 500;
-    this.fireRate = 1;
+    this.fireRate = 1600;
 
     /*this.pattern = Phaser.ArrayUtils.numberArrayStep(-1000, 1000, 100);
     this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(1000, -1000, -100));
