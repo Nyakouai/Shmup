@@ -11,14 +11,19 @@ BasicGame.Preloader.prototype = {
     this.load.image('player', 'App/Assets/player.png');
     this.load.image('background', 'App/Assets/Background/niveau1.png');
 
-    this.load.spritesheet('ennemy1', 'App/Assets/Ennemies/ennemy1.png', 89, 82, 4);
-    this.load.spritesheet('ennemy2', 'App/Assets/Ennemies/ennemy2.png', 59, 63, 2);
-    this.load.spritesheet('ennemy3', 'App/Assets/Ennemies/ennemy3.png', 76, 75, 2);
-    this.load.image('building1', 'App/Assets/Ennemies/building1.png');
+    this.load.spritesheet('enemy1', 'App/Assets/Enemies/enemy1.png', 89, 82, 4);
+    this.load.spritesheet('enemy2', 'App/Assets/Enemies/enemy2.png', 59, 63, 2);
+    this.load.spritesheet('enemy3', 'App/Assets/Enemies/enemy3.png', 76, 75, 2);
+    this.load.image('building1', 'App/Assets/Enemies/building1.png');
+    
+    for (var i = 1; i <= 11; i++)
+    {
+        this.load.image('bullet' + i, 'App/Assets/Effects/bullet' + i + '.png');
+    }
       
-      
-    this.load.image('bullet', 'App/Assets/Effects/shot.png');
-    this.load.image('ennemyBullet', 'App/Assets/Effects/ennemyShot.png');
+    this.load.spritesheet('fireball','App/Assets/Effects/fireballs.png',28,26);
+
+  
     //this.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png');
     //this.load.audio('titleMusic', ['audio/main_menu.mp3']);
     //  + lots of other required assets here

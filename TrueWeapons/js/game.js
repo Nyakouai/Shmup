@@ -1,9 +1,3 @@
-/* 
-/// TODO ///
- #Hitbox des bullets
-////////////
-*/
-
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
 var background = null;
@@ -54,6 +48,8 @@ function create() {
     textControls = game.add.text(650,10,'A: Shoot - Z: Bomb',{font:'12px monospace',fill:'#fff'});
 
     debugText = game.add.text(10,30,'',{font:'12px monospace',fill:'#fff'});
+
+    game.time.advancedTiming = true;
 }
 
 function update() {
@@ -64,12 +60,14 @@ function update() {
 
     textBombs.text = 'Bombs: ' + player.countBombs;
 
-    debugText.text = '';
+    debugText.text = 'FPS : ' + game.time.fps;
 }
 
 function render() {
     game.debug.body(player);
-    /*
+    
+    //game.debug.text(game.time.fps || '--', 200, 10, "#00ff00");
+
     player.weapons[player.weaponLevel].forEach(function (bullet) {
         game.debug.body(bullet);
     });
@@ -77,7 +75,7 @@ function render() {
     player.weapons[3].forEach(function (bullet) {
         game.debug.body(bullet);
     });
-    */
+    
 }
 
 function spawnItem() {

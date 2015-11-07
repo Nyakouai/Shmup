@@ -1,6 +1,4 @@
 var BasicGame = {
-  SCROLL_SPEED: 12,
-  BULLET_VELOCITY: 300
 };
 
 BasicGame.Boot = function (game) {

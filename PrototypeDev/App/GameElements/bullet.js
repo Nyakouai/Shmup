@@ -17,7 +17,7 @@ var Bullet = function (game, key) {
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
-Bullet.prototype.fire = function(x, y, angle, speed, width, height, gx, gy){
+Bullet.prototype.fire = function(x, y, angle, speed, gx, gy){
     gx = gx || 0;
     gy = gy || 0;
 
@@ -27,8 +27,6 @@ Bullet.prototype.fire = function(x, y, angle, speed, width, height, gx, gy){
     this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
     this.angle = angle;
-
-    this.body.setSize(width, height, 0, 0);
 
     this.body.gravity.set(gy, gx);
 

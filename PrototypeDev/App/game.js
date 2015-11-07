@@ -8,6 +8,16 @@
  * or revised without written permission of the authors.
 */
 
+/**
+ * @fileOverview Controller of the game
+ * @author Bruyère Julien
+ * @version 0.5
+ */
+
+/**
+ * @class Controller of the game
+ * @param {Game} game Accessor of the Phaser's game object
+ */
 BasicGame.Game = function (game) {
 
 	var player;
@@ -24,7 +34,12 @@ BasicGame.Game = function (game) {
 
 BasicGame.Game.prototype = {
 
+	/**
+	 * Constructor of the game
+	 * @public
+	 */
   create: function () {
+  	this.game.renderer.renderSession.roundPixels = true;
 	this.physics.startSystem(Phaser.Physics.ARCADE);
 	
 	back = this.add.tileSprite(0, 0, 640, 1440, 'background');
@@ -35,15 +50,15 @@ BasicGame.Game.prototype = {
 	gEnnemies = this.add.group();
 	gEnnemies.enableBody = true;
 	
-	new Ennemy(this, gEnnemies, 60, 50, 'ennemy1');
-	new Ennemy(this, gEnnemies, 20, 100, 'ennemy1');
-	new Ennemy(this, gEnnemies, 170, 150, 'ennemy2');
-	new Ennemy(this, gEnnemies, 230, 150, 'ennemy2');
-	new Ennemy(this, gEnnemies, 280, 50, 'ennemy3');
-	new Ennemy(this, gEnnemies, 330, 100, 'ennemy3');
+	new Ennemy(this, gEnnemies, 60, 50, 'enemy1');
+	new Ennemy(this, gEnnemies, 20, 100, 'enemy1');
+	new Ennemy(this, gEnnemies, 170, 150, 'enemy2');
+	new Ennemy(this, gEnnemies, 230, 150, 'enemy2');
+	new Ennemy(this, gEnnemies, 280, 50, 'enemy3');
+	new Ennemy(this, gEnnemies, 330, 100, 'enemy3');
 
-	new Ennemy(this, gEnnemies, 100, 350, 'ennemy2');
-	new Ennemy(this, gEnnemies, 300, 350, 'ennemy2');
+	new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
+	new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
 
 	
 	//new Structure(game, gEnnemies, 300, 200, 'building1');
@@ -53,14 +68,23 @@ BasicGame.Game.prototype = {
 	
   },
 
+  /**
+   * Update the game; called every frame
+   * @public
+   */
   update: function () {
 	
-	this.physics.arcade.overlap(player.bullets, gEnnemies, this.collisionHandler, null, this)
+	//this.physics.arcade.overlap(player.bullets, gEnnemies, this.collisionHandler, null, this)
 
-	player.update();
+	//player.update();
 
   },
 
+  /**
+   * Handle collisions between a bullet and an ennemy
+   * @param  {Bullet} bullet The bullet to test 
+   * @param  {Ennemy} ennemy The ennemy to test
+   */
   collisionHandler: function (bullet, ennemy) {
 	bullet.kill();
 	ennemy.kill();
@@ -69,6 +93,10 @@ BasicGame.Game.prototype = {
 	scoreText.text = 'Score: ' + score;
 	},
 
+	/**
+	 * Render debug infos on the screen
+	 * @public
+	 */
   render: function () {
 
 		this.game.debug.cameraInfo(this.camera, 32, 32);
