@@ -19,14 +19,9 @@
  * @param {Game} game Accessor of the Phaser's game object
  */
 BasicGame.Game = function (game) {
-
+	var level;
 	var player;
-	//var ennemy = new Array();
-	
 	var gEnnemies;
-	
-
-	var back;
 	
 	var score;
 	var scoreText;
@@ -38,80 +33,78 @@ BasicGame.Game.prototype = {
 	 * Constructor of the game
 	 * @public
 	 */
-  create: function () {
-  	this.game.renderer.renderSession.roundPixels = true;
-	this.physics.startSystem(Phaser.Physics.ARCADE);
+	create: function () {
+  		this.game.renderer.renderSession.roundPixels = true;
+		this.physics.startSystem(Phaser.Physics.ARCADE);
 	
-	back = this.add.tileSprite(0, 0, 640, 1440, 'background');
-	back.autoScroll(0, 50);
-	
-	player = new Player(this.game);
-	
-	gEnnemies = this.add.group();
-	gEnnemies.enableBody = true;
-	
-	new Ennemy(this, gEnnemies, 60, 50, 'enemy1');
-	new Ennemy(this, gEnnemies, 20, 100, 'enemy1');
-	new Ennemy(this, gEnnemies, 170, 150, 'enemy2');
-	new Ennemy(this, gEnnemies, 230, 150, 'enemy2');
-	new Ennemy(this, gEnnemies, 280, 50, 'enemy3');
-	new Ennemy(this, gEnnemies, 330, 100, 'enemy3');
+		level = new Level(this.game);
+		
+		player = new Player(this.game);
+		
+		gEnnemies = this.add.group();
+		gEnnemies.enableBody = true;
+		
+		new Ennemy(this, gEnnemies, 60, 50, 'enemy1');
+		new Ennemy(this, gEnnemies, 20, 100, 'enemy1');
+		new Ennemy(this, gEnnemies, 170, 150, 'enemy2');
+		new Ennemy(this, gEnnemies, 230, 150, 'enemy2');
+		new Ennemy(this, gEnnemies, 280, 50, 'enemy3');
+		new Ennemy(this, gEnnemies, 330, 100, 'enemy3');
 
-	new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
-	new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
+		new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
+		new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
 
+		
+		//new Structure(game, gEnnemies, 300, 200, 'building1');
+		
+		score=0;
+		scoreText = this.add.text(10, 720-40, 'score: 0', 
+			{ fontSize: '32px', fill: '#000' });
 	
-	//new Structure(game, gEnnemies, 300, 200, 'building1');
-	
-	score=0;
-	scoreText = this.add.text(0, 720-40, 'score: 0', { fontSize: '32px', fill: '#000' });
-	
-  },
+  	},
 
-  /**
-   * Update the game; called every frame
-   * @public
-   */
-  update: function () {
-	
-	//this.physics.arcade.overlap(player.bullets, gEnnemies, this.collisionHandler, null, this)
+	/**
+	 * Update the game; called every frame
+	 * @public
+	 */
+	update: function () {
+		this.physics.arcade.overlap(player.weapons, gEnnemies, this.collisionHandler, null, this)
 
-	//player.update();
+		//player.update();
 
-  },
+	},
 
-  /**
-   * Handle collisions between a bullet and an ennemy
-   * @param  {Bullet} bullet The bullet to test 
-   * @param  {Ennemy} ennemy The ennemy to test
-   */
-  collisionHandler: function (bullet, ennemy) {
-	bullet.kill();
-	ennemy.kill();
-	
-	score += 10;
-	scoreText.text = 'Score: ' + score;
+	/**
+   	 * Handle collisions between a bullet and an ennemy
+   	 * @param  {Bullet} bullet The bullet to test 
+   	 * @param  {Ennemy} ennemy The ennemy to test
+   	 */
+	collisionHandler: function (bullet, ennemy) {
+		bullet.kill();
+		ennemy.kill();
+		
+		score += 10;
+		scoreText.text = 'Score: ' + score;
 	},
 
 	/**
 	 * Render debug infos on the screen
 	 * @public
 	 */
-  render: function () {
-
+	render: function () {
 		this.game.debug.cameraInfo(this.camera, 32, 32);
 		//this.game.debug.body(player.object);
 	},
 
-  quitGame: function (pointer) {
+	quitGame: function (pointer) {
 
-    //  Here you should destroy anything you no longer need.
-    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
+	    //  Here you should destroy anything you no longer need.
+	    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
-    //  Then let's go back to the main menu.
-    //this.state.start('MainMenu');
+	    //  Then let's go back to the main menu.
+	    //this.state.start('MainMenu');
 
-  }
+	}
 
 };
 
