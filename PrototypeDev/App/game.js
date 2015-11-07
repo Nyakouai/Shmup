@@ -25,6 +25,8 @@ BasicGame.Game = function (game) {
 	
 	var score;
 	var scoreText;
+
+	var nextRandomEnnemySpawn;
 };
 
 BasicGame.Game.prototype = {
@@ -54,6 +56,8 @@ BasicGame.Game.prototype = {
 		new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
 		new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
 
+		nextRandomEnnemySpawn = this.game.time.time + 5000;
+
 		
 		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
@@ -71,7 +75,12 @@ BasicGame.Game.prototype = {
 		this.physics.arcade.overlap(player.weapons, gEnnemies, this.collisionHandler, null, this)
 
 		//player.update();
-
+		
+		if(this.game.time.time > nextRandomEnnemySpawn)
+		{
+			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
+			nextRandomEnnemySpawn = this.game.time.time + 5000;
+		}
 	},
 
 	/**
@@ -93,6 +102,7 @@ BasicGame.Game.prototype = {
 	 */
 	render: function () {
 		this.game.debug.cameraInfo(this.camera, 32, 32);
+		this.game.debug.text("Current time" + this.game.time.time, 30, 120)
 		//this.game.debug.body(player.object);
 	},
 

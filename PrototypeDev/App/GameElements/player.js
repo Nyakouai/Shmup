@@ -88,10 +88,3 @@ Player.prototype.bombCooldown = function() {
         this.tint = 0xFFFFFF;
     }
 };
-
-
-
-
-
-
-
