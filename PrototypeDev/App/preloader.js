@@ -21,10 +21,9 @@ BasicGame.Preloader.prototype = {
         this.load.image('bullet' + i, 'App/Assets/Effects/bullet' + i + '.png');
     }
       
-    this.load.spritesheet('fireball','App/Assets/Effects/fireballs.png',28,26);
+    this.load.spritesheet('fireball', 'App/Assets/Effects/fireballs.png', 28, 26);
 
-  
-    //this.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png');
+    this.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png', 54, 56);
     //this.load.audio('titleMusic', ['audio/main_menu.mp3']);
     //  + lots of other required assets here
 

@@ -1,6 +1,8 @@
 var Bullet = function (game, key) {
     Phaser.Sprite.call(this, game, 0, 0, key);
 
+    this.game = game;
+
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
 
     this.anchor.set(0.5,0.5);
@@ -12,12 +14,14 @@ var Bullet = function (game, key) {
     this.tracking = false;
     this.scaleSpeed = 0;
     this.animation = false;
+    this.indestructible = false;
+    this.power = 0;
 };
 
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
 Bullet.prototype.constructor = Bullet;
 
-Bullet.prototype.fire = function(x, y, angle, speed, gx, gy){
+Bullet.prototype.fire = function(x, y, angle, speed, width, height, gx, gy){
     gx = gx || 0;
     gy = gy || 0;
 
@@ -27,6 +31,8 @@ Bullet.prototype.fire = function(x, y, angle, speed, gx, gy){
     this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
     this.angle = angle;
+
+    this.body.setSize(width, height, 0, 0);
 
     this.body.gravity.set(gy, gx);
 
