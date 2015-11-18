@@ -60,7 +60,7 @@ Player.prototype.update = function() {
 	if (game.input.activePointer.isDown &&
 		game.physics.arcade.distanceToPointer(this)>15) 
 	{
-		game.physics.arcade.moveToPointer(this, this.speed);
+		game.physics.arcade.moveToPointer(this, this.speed, game.input.activePointer, 500);
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.A))

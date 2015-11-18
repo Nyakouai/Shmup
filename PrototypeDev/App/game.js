@@ -22,6 +22,9 @@ BasicGame.Game = function (game) {
 	var level;
 	var player;
 	var enemies;
+
+	var powerupItems;
+	var bombItems;
 	
 	var score;
 	var scoreText;
@@ -60,9 +63,16 @@ BasicGame.Game.prototype = {
 */
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
+		enemies.push(new Enemies.EnemyPowerup(this.game));
 
-    	this.game.time.events.repeat(2000, 100, this.spawnEnemy, this);
+    	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
+    	this.game.time.events.repeat(5000, 100, this.spawnEnemy2, this);
 
+    
+    	powerupItems = new Collectible.Powerup(this.game);
+    	powerupItems.enableBody = true;
+    	bombItems = new Collectible.Bomb(this.game);
+    	bombItems.enableBody = true;
 		
 		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
@@ -79,6 +89,9 @@ BasicGame.Game.prototype = {
 	update: function () {
 		this.physics.arcade.overlap(enemies, player.weapons, this.collisionHandler, null, this)
 
+    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
+    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
+
 		//player.update();
 		/*
 		if(this.game.time.time > nextRandomEnnemySpawn)
@@ -92,8 +105,12 @@ BasicGame.Game.prototype = {
 		},this);
 	},
 
-	spawnEnemy: function () {
+	spawnEnemy1: function () {
 		enemies[0].appear();
+	},
+
+	spawnEnemy2: function () {
+		enemies[1].appear();
 	},
 
 	/**
@@ -112,12 +129,33 @@ BasicGame.Game.prototype = {
 			enemy.play('hit');
 		}
 		else{
+			if(enemy.powerup){
+				powerupItems.appear(enemy);
+			}
+			if(enemy.bomb){
+				bombItems.appear(enemy);
+			}
 			enemy.explode();
 			enemy.kill();
 			score += enemy.score;
 		}
 		
 		scoreText.text = 'Score: ' + score;
+	},
+
+	playerPowerup: function(player, powerup) {
+    	powerup.kill();
+    	if(player.weaponLevel < 2){
+        	player.weaponLevel++;
+    	}
+    	else{
+    		score += 50;
+    	}
+	},
+
+	playerBomb: function(player, bomb) {
+    	bomb.kill();
+    	player.countBombs++;
 	},
 
 	/**

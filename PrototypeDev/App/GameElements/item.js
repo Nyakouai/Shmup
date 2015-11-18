@@ -39,9 +39,9 @@ Collectible.Powerup = function (game) {
 Collectible.Powerup.prototype = Object.create(Phaser.Group.prototype);
 Collectible.Powerup.prototype.constructor = Collectible.Powerup;
 
-Collectible.Powerup.prototype.appear = function () {
-	var x = game.rnd.integerInRange(20, 780);
-	var y = 0;
+Collectible.Powerup.prototype.appear = function (source) {
+	var x = source.x;
+	var y = source.y;
 
 	this.getFirstExists(false).appear(x,y,this.itemSpeed);
 }
@@ -64,9 +64,9 @@ Collectible.Bomb = function (game) {
 Collectible.Bomb.prototype = Object.create(Phaser.Group.prototype);
 Collectible.Bomb.prototype.constructor = Collectible.Bomb;
 
-Collectible.Bomb.prototype.appear = function () {
-	var x = game.rnd.integerInRange(20, 780);
-	var y = 0;
+Collectible.Bomb.prototype.appear = function (source) {
+	var x = source.x;
+	var y = source.y;
 
 	this.getFirstExists(false).appear(x,y,this.itemSpeed);
 }
