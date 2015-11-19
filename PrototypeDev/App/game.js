@@ -15,8 +15,8 @@
  */
 
 /**
- * @class Controller of the game
- * @param {Game} game Accessor of the Phaser's game object
+ * @class Game
+ * @param {Game} game accessor of the Phaser's game object
  */
 BasicGame.Game = function (game) {
 	var level;
@@ -25,6 +25,7 @@ BasicGame.Game = function (game) {
 	
 	var score;
 	var scoreText;
+	var playerLifeText;
 
 	var nextRandomEnnemySpawn;
 };
@@ -38,6 +39,9 @@ BasicGame.Game.prototype = {
 	create: function () {
   		this.game.renderer.renderSession.roundPixels = true;
 		this.physics.startSystem(Phaser.Physics.ARCADE);
+
+		var menu = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
+		menu.onDown.add(this.openMenu, this);
 	
 		level = new Level(this.game);
 		
@@ -62,9 +66,10 @@ BasicGame.Game.prototype = {
 		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
 		score=0;
-		scoreText = this.add.text(10, 720-40, 'score: 0', 
+		scoreText = this.add.text(10, 600-40, 'score : 0', 
 			{ fontSize: '32px', fill: '#000' });
-	
+		playerLifeText = this.add.text(800-100, 600-40, 'life : 3', 
+			{ fontSize: '32px', fill: '#000' });
   	},
 
 	/**
@@ -72,7 +77,8 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
-		this.physics.arcade.overlap(player.weapons, gEnnemies, this.collisionHandler, null, this)
+		this.physics.arcade.overlap(player.weapons, gEnnemies, this.bulletCollisionHandler, null, this)
+		this.physics.arcade.overlap(player, gEnnemies, this.playerCollisionHandler, null, this)
 
 		//player.update();
 		
@@ -81,6 +87,8 @@ BasicGame.Game.prototype = {
 			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
 			nextRandomEnnemySpawn = this.game.time.time + 5000;
 		}
+
+
 	},
 
 	/**
@@ -88,12 +96,24 @@ BasicGame.Game.prototype = {
    	 * @param  {Bullet} bullet The bullet to test 
    	 * @param  {Ennemy} ennemy The ennemy to test
    	 */
-	collisionHandler: function (bullet, ennemy) {
+	bulletCollisionHandler: function (bullet, ennemy) {
 		bullet.kill();
 		ennemy.kill();
 		
 		score += 10;
-		scoreText.text = 'Score: ' + score;
+		scoreText.text = 'Score : ' + score;
+	},
+
+	/**
+   	 * Handle collisions between a bullet and an ennemy
+   	 * @param  {Bullet} bullet The bullet to test 
+   	 * @param  {Ennemy} ennemy The ennemy to test
+   	 */
+	playerCollisionHandler: function (player, ennemy) {
+		player.takeDamage();
+		ennemy.kill();
+		
+		playerLifeText.text = 'life : ' + player.life;
 	},
 
 	/**
@@ -101,9 +121,10 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	render: function () {
-		this.game.debug.cameraInfo(this.camera, 32, 32);
-		this.game.debug.text("Current time" + this.game.time.time, 30, 120)
-		//this.game.debug.body(player.object);
+	},
+
+	openMenu: function () {
+		this.state.start('MainMenu');
 	},
 
 	quitGame: function (pointer) {
