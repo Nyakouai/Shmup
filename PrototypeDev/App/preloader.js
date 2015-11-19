@@ -42,7 +42,10 @@ BasicGame.Preloader.prototype = {
     }
       
     this.load.spritesheet('fireball',dir+'Effects/fireballs.png',28,26);
+    this.load.image('powerup',dir+'Items/powerup.png');
+    this.load.image('bomb',dir+'Items/bomb.png');
 
+    this.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png', 54, 56);
   },
 
   create: function () {

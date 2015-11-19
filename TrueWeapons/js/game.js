@@ -67,7 +67,7 @@ function render() {
     game.debug.body(player);
     
     //game.debug.text(game.time.fps || '--', 200, 10, "#00ff00");
-
+/*
     player.weapons[player.weaponLevel].forEach(function (bullet) {
         game.debug.body(bullet);
     });
@@ -75,7 +75,7 @@ function render() {
     player.weapons[3].forEach(function (bullet) {
         game.debug.body(bullet);
     });
-    
+  */  
 }
 
 function spawnItem() {

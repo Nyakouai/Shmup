@@ -21,13 +21,16 @@
 BasicGame.Game = function (game) {
 	var level;
 	var player;
-	var gEnnemies;
+	var enemies;
+
+	var powerupItems;
+	var bombItems;
 	
 	var score;
 	var scoreText;
 	var playerLifeText;
 
-	var nextRandomEnnemySpawn;
+	//var nextRandomEnnemySpawn;
 };
 
 BasicGame.Game.prototype = {
@@ -46,7 +49,7 @@ BasicGame.Game.prototype = {
 		level = new Level(this.game);
 		
 		player = new Player(this.game);
-		
+		/*
 		gEnnemies = this.add.group();
 		gEnnemies.enableBody = true;
 		
@@ -61,7 +64,19 @@ BasicGame.Game.prototype = {
 		new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
 
 		nextRandomEnnemySpawn = this.game.time.time + 5000;
+*/
+		enemies = [];
+		enemies.push(new Enemies.Enemy1(this.game));
+		enemies.push(new Enemies.EnemyPowerup(this.game));
 
+    	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
+    	this.game.time.events.repeat(5000, 100, this.spawnEnemy2, this);
+
+    
+    	powerupItems = new Collectible.Powerup(this.game);
+    	powerupItems.enableBody = true;
+    	bombItems = new Collectible.Bomb(this.game);
+    	bombItems.enableBody = true;
 		
 		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
@@ -77,38 +92,64 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
-		this.physics.arcade.overlap(player.weapons, gEnnemies, this.bulletCollisionHandler, null, this)
-		this.physics.arcade.overlap(player, gEnnemies, this.playerCollisionHandler, null, this)
+		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
+		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
+		
+    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
+    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
 
 		//player.update();
-		
+		/*
 		if(this.game.time.time > nextRandomEnnemySpawn)
 		{
 			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
+
 			nextRandomEnnemySpawn = this.game.time.time + 5000;
+
+		}*/
+		enemies[0].forEachExists(function (enemy) {
+			enemy.fire(player);
+		},this);
+	},
+
+	spawnEnemy1: function () {
+		enemies[0].appear();
+	},
+
+	spawnEnemy2: function () {
+		enemies[1].appear();
+	},
+
+	/**
+   	 * Handle collisions between a bullet and an ennemy
+   	 * @param  {Bullet} bullet The bullet to test 
+   	 * @param  {Ennemy} ennemy The ennemy to test
+   	 */
+	bulletcollisionHandler: function (enemy, bullet) {
+		if(!bullet.indestructible){
+			bullet.kill();
 		}
-
-
-	},
-
-	/**
-   	 * Handle collisions between a bullet and an ennemy
-   	 * @param  {Bullet} bullet The bullet to test 
-   	 * @param  {Ennemy} ennemy The ennemy to test
-   	 */
-	bulletCollisionHandler: function (bullet, ennemy) {
-		bullet.kill();
-		ennemy.kill();
 		
-		score += 10;
-		scoreText.text = 'Score : ' + score;
+		enemy.damage(bullet.power);
+	
+		if(enemy.health > 0){
+			enemy.play('hit');
+		}
+		else{
+			if(enemy.powerup){
+				powerupItems.appear(enemy);
+			}
+			if(enemy.bomb){
+				bombItems.appear(enemy);
+			}
+			enemy.explode();
+			enemy.kill();
+			score += enemy.score;
+		}
+		
+		scoreText.text = 'Score: ' + score;
 	},
-
-	/**
-   	 * Handle collisions between a bullet and an ennemy
-   	 * @param  {Bullet} bullet The bullet to test 
-   	 * @param  {Ennemy} ennemy The ennemy to test
-   	 */
+	
 	playerCollisionHandler: function (player, ennemy) {
 		player.takeDamage();
 		ennemy.kill();
@@ -116,11 +157,45 @@ BasicGame.Game.prototype = {
 		playerLifeText.text = 'life : ' + player.life;
 	},
 
+	playerPowerup: function(player, powerup) {
+    	powerup.kill();
+    	if(player.weaponLevel < 2){
+        	player.weaponLevel++;
+    	}
+    	else{
+    		score += 50;
+    	}
+	},
+
+	playerBomb: function(player, bomb) {
+    	bomb.kill();
+    	player.countBombs++;
+	},
+
 	/**
 	 * Render debug infos on the screen
 	 * @public
 	 */
 	render: function () {
+
+		this.game.debug.cameraInfo(this.camera, 32, 32);
+		this.game.debug.text("Current time" + this.game.time.time, 30, 120)
+		
+		//Debug Hitbox
+		/*
+		this.game.debug.body(player);
+		player.weapons[player.weaponLevel].forEach(function (bullet) {
+        	bullet.game.debug.body(bullet);
+    	});
+    
+    	player.weapons[3].forEach(function (bullet) {
+        	bullet.game.debug.body(bullet);
+    	});
+
+    	enemies[0].forEach(function (enemy) {
+        	enemy.game.debug.body(enemy);
+    	});
+  		*/
 	},
 
 	openMenu: function () {

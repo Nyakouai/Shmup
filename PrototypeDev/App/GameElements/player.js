@@ -61,7 +61,7 @@ Player.prototype.update = function() {
 	if (game.input.activePointer.isDown &&
 		game.physics.arcade.distanceToPointer(this)>5) 
 	{
-		game.physics.arcade.moveToPointer(this, this.speed+20);
+		game.physics.arcade.moveToPointer(this, this.speed, game.input.activePointer, 500);
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.A))
@@ -76,11 +76,11 @@ Player.prototype.takeDamage = function() {
 	
 Player.prototype.launchBomb = function() {
 	var fireball = this.weapons[3];
-	if(this.countBombs>0 && game.time.time >= fireball.nextFire) 
+	if(this.countBombs>0 && this.game.time.time >= fireball.nextFire) 
 	{
     	this.countBombs--;
     	fireball.fire(this);
-    	game.time.events.repeat(50,32,this.bombCooldown,this);
+    	this.game.time.events.repeat(50,32,this.bombCooldown,this);
 	}
 
 };
