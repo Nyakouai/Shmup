@@ -1,4 +1,23 @@
+/*
+ * ENSICAEN
+ * 6 Boulevard Marechal Juin 
+ * F-14050 Caen Cedex 
+ * 
+ * This file is owned by ENSICAEN students.
+ * No portion of this document may be reproduced, copied
+ * or revised without written permission of the authors.
+*/
 
+/**
+ * @fileOverview Preloader sequence
+ * @author Bruyère Julien
+ * @version 0.2
+ */
+
+/**
+ * @class Preloader
+ * @param {Game} game accessor of the Phaser's game object
+ */
 BasicGame.Preloader = function (game) {
 
 };
@@ -6,29 +25,27 @@ BasicGame.Preloader = function (game) {
 BasicGame.Preloader.prototype = {
 
   preload: function () {
+    var dir = 'App/Assets/';
 
-    //  Here we load the rest of the assets our game needs.
-    this.load.image('player', 'App/Assets/player.png');
-    this.load.image('background', 'App/Assets/Background/niveau1.png');
+    this.load.image('menuBackground', dir+'mainMenuBackground.png');
+    this.load.image('player', dir+'player.png');
+    this.load.image('background', dir+'Background/niveau1.png');
 
-    this.load.spritesheet('enemy1', 'App/Assets/Enemies/enemy1.png', 89, 82, 4);
-    this.load.spritesheet('enemy2', 'App/Assets/Enemies/enemy2.png', 59, 63, 2);
-    this.load.spritesheet('enemy3', 'App/Assets/Enemies/enemy3.png', 76, 75, 2);
-    this.load.image('building1', 'App/Assets/Enemies/building1.png');
+    this.load.spritesheet('enemy1', dir+'Enemies/enemy1.png', 89, 82, 4);
+    this.load.spritesheet('enemy2', dir+'Enemies/enemy2.png', 59, 63, 2);
+    this.load.spritesheet('enemy3', dir+'Enemies/enemy3.png', 76, 75, 2);
+    this.load.image('building1', dir+'Enemies/building1.png');
     
     for (var i = 1; i <= 11; i++)
     {
-        this.load.image('bullet' + i, 'App/Assets/Effects/bullet' + i + '.png');
+        this.load.image('bullet' + i, dir+'Effects/bullet' + i + '.png');
     }
       
-    this.load.spritesheet('fireball', 'App/Assets/Effects/fireballs.png', 28, 26);
-    this.load.image('powerup','App/Assets/Items/powerup.png');
-    this.load.image('bomb','App/Assets/Items/bomb.png');
+    this.load.spritesheet('fireball',dir+'Effects/fireballs.png',28,26);
+    this.load.image('powerup',dir+'Items/powerup.png');
+    this.load.image('bomb',dir+'Items/bomb.png');
 
     this.load.spritesheet('explosion', 'App/Assets/Effects/explosion.png', 54, 56);
-    //this.load.audio('titleMusic', ['audio/main_menu.mp3']);
-    //  + lots of other required assets here
-
   },
 
   create: function () {
@@ -48,7 +65,7 @@ BasicGame.Preloader.prototype = {
     //if (this.cache.isSoundDecoded('titleMusic') && this.ready == false)
     //{
     //  this.ready = true;
-      this.state.start('Game');
+      this.state.start('MainMenu');
     //}
 
   }

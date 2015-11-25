@@ -52,6 +52,7 @@ Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.appear = function(x, y, width, height, speed, health){
+	this.exists = true;
 	this.reset(x, y, health);
 	this.body.setSize(width, height, 0, 0);
 	this.behaviour.behave(this, speed);
@@ -79,10 +80,19 @@ Enemy.prototype.explode = function(){
 
     explosion.body.velocity.x = this.body.velocity.x;
     explosion.body.velocity.y = this.body.velocity.y;
+
+    this.exists = false;
 }
 
 Enemy.prototype.update = function(){
-	this.behaviour.update(this);
+	if(this.exists){
+		this.behaviour.update(this);
+	}
+}
+
+Enemy.prototype.kill = function(){
+	Phaser.Sprite.prototype.kill.call(this);
+	this.behaviour.reset(this);
 }
 
 var Enemies = {};
@@ -96,7 +106,7 @@ Enemies.Enemy1 = function(game){
 
 	this.health = 5;
 	this.score = 100;
-	this.speed = 60;
+	//this.speed = 60;
 
 	for (var i = 0; i < 10; i++){
 		this.add(new Enemy(game, 'enemy1'), true);
@@ -121,11 +131,12 @@ Enemies.Enemy1 = function(game){
 Enemies.Enemy1.prototype = Object.create(Phaser.Group.prototype);
 Enemies.Enemy1.prototype.constructor = Enemies.Enemy1;
 
-Enemies.Enemy1.prototype.appear = function(){
-	var x = this.game.rnd.integerInRange(20, 380);
-	var y = -30;
+Enemies.Enemy1.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(20, 620);
+	}
 
-	this.getFirstExists(false).appear(x,y,40,40,this.speed,this.health);
+	this.getFirstExists(false).appear(x,y,40,40,speed,this.health);
 }
 
 ////////// Powerup enemy /////////////
@@ -137,7 +148,7 @@ Enemies.EnemyPowerup = function(game){
 
 	this.health = 5;
 	this.score = 50;
-	this.speed = 100;
+	//this.speed = 100;
 
 	for (var i = 0; i < 10; i++){
 		this.add(new Enemy(game, 'enemy3'), true);
@@ -163,11 +174,12 @@ Enemies.EnemyPowerup = function(game){
 Enemies.EnemyPowerup.prototype = Object.create(Phaser.Group.prototype);
 Enemies.EnemyPowerup.prototype.constructor = Enemies.EnemyPowerup;
 
-Enemies.EnemyPowerup.prototype.appear = function(){
-	var x = this.game.rnd.integerInRange(20, 380);
-	var y = -30;
+Enemies.EnemyPowerup.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(20, 620);
+	}
 
-	this.getFirstExists(false).appear(x,y,26,40,this.speed,this.health);
+	this.getFirstExists(false).appear(x,y,26,40,speed,this.health);
 }
 
 ////////////////////////////////////////////////
@@ -182,16 +194,53 @@ Behaviour.Null.prototype.behave = function(enemy, speed){}
 
 Behaviour.Null.prototype.update = function(enemy){}
 
+Behaviour.Null.prototype.reset = function(enemy){}
+
 /////////
 Behaviour.Enemy1 = function(game){
 	this.game = game;
+	this.speed = 0;
+	this.points = {
+		//'x':[119,119,119.5,113.5,64.5,-42.5],
+		//"y":[-30,54,143,259,384,453]
+		//'x':[119,99.5,-76.5],
+		//"y":[-29,289,468]
+		"x":[119,99.5,-76.5],
+		"y":[-40,455,535]
+	};
 };
 
 Behaviour.Enemy1.prototype.behave = function(enemy, speed){
-	enemy.body.velocity.y = speed;
+	//enemy.body.velocity.y = speed;
+	this.speed = speed;
+
+	this.path = [];
+	this.pi = 0;
+
+	var x = 1/this.game.width;
+
+	for(var i=0; i<=1; i+=x){
+		var px = this.game.math.catmullRomInterpolation(this.points.x, i);
+		var py = this.game.math.catmullRomInterpolation(this.points.y, i);
+
+		this.path.push( { x: px, y: py } );
+	}
 }
 
-Behaviour.Enemy1.prototype.update = function(enemy){}
+Behaviour.Enemy1.prototype.update = function(enemy){
+	enemy.body.x = this.path[this.pi].x;
+	enemy.body.y = this.path[this.pi].y;
+	this.pi++;
+	if(this.pi >= this.path.length){
+		enemy.kill();
+		//delete this;
+		//this.pi = 0;
+	}
+}
+
+Behaviour.Enemy1.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
+}
 
 /////////
 Behaviour.EnemyPowerup = function(game){
@@ -212,4 +261,8 @@ Behaviour.EnemyPowerup.prototype.update = function(enemy){
 	else{
 		enemy.body.velocity.x = this.speed;
 	}
+}
+
+Behaviour.EnemyPowerup.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
 }

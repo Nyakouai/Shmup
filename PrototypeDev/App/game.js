@@ -15,8 +15,8 @@
  */
 
 /**
- * @class Controller of the game
- * @param {Game} game Accessor of the Phaser's game object
+ * @class Game
+ * @param {Game} game accessor of the Phaser's game object
  */
 BasicGame.Game = function (game) {
 	var level;
@@ -28,6 +28,7 @@ BasicGame.Game = function (game) {
 	
 	var score;
 	var scoreText;
+	var playerLifeText;
 
 	//var nextRandomEnnemySpawn;
 };
@@ -41,9 +42,12 @@ BasicGame.Game.prototype = {
 	create: function () {
   		this.game.renderer.renderSession.roundPixels = true;
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-	
-		level = new Level(this.game);
+
+		var menu = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
+		menu.onDown.add(this.openMenu, this);
 		
+		level = new Level(this.game);
+
 		player = new Player(this.game);
 		/*
 		gEnnemies = this.add.group();
@@ -64,10 +68,11 @@ BasicGame.Game.prototype = {
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
-
+		level.enemies = enemies;
+/*
     	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
     	this.game.time.events.repeat(5000, 100, this.spawnEnemy2, this);
-
+*/
     
     	powerupItems = new Collectible.Powerup(this.game);
     	powerupItems.enableBody = true;
@@ -77,9 +82,10 @@ BasicGame.Game.prototype = {
 		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
 		score=0;
-		scoreText = this.add.text(10, 720-40, 'score: 0', 
+		scoreText = this.add.text(10, 600-40, 'Score: 0', 
 			{ fontSize: '32px', fill: '#000' });
-	
+		playerLifeText = this.add.text(640-100, 600-40, 'Life: 3', 
+			{ fontSize: '32px', fill: '#000' });
   	},
 
 	/**
@@ -87,8 +93,9 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
-		this.physics.arcade.overlap(enemies, player.weapons, this.collisionHandler, null, this)
-
+		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
+		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
+		
     	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
     	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
 
@@ -99,12 +106,15 @@ BasicGame.Game.prototype = {
 			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
 
 			nextRandomEnnemySpawn = this.game.time.time + 5000;
+
 		}*/
+		level.update(enemies[0]);
+
 		enemies[0].forEachExists(function (enemy) {
 			enemy.fire(player);
 		},this);
 	},
-
+/*
 	spawnEnemy1: function () {
 		enemies[0].appear();
 	},
@@ -112,13 +122,13 @@ BasicGame.Game.prototype = {
 	spawnEnemy2: function () {
 		enemies[1].appear();
 	},
-
+*/
 	/**
    	 * Handle collisions between a bullet and an ennemy
    	 * @param  {Bullet} bullet The bullet to test 
    	 * @param  {Ennemy} ennemy The ennemy to test
    	 */
-	collisionHandler: function (enemy, bullet) {
+	bulletcollisionHandler: function (enemy, bullet) {
 		if(!bullet.indestructible){
 			bullet.kill();
 		}
@@ -142,6 +152,13 @@ BasicGame.Game.prototype = {
 		
 		scoreText.text = 'Score: ' + score;
 	},
+	
+	playerCollisionHandler: function (player, ennemy) {
+		player.takeDamage();
+		ennemy.kill();
+		
+		playerLifeText.text = 'Life: ' + player.life;
+	},
 
 	playerPowerup: function(player, powerup) {
     	powerup.kill();
@@ -163,6 +180,7 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	render: function () {
+
 		this.game.debug.cameraInfo(this.camera, 32, 32);
 		this.game.debug.text("Current time" + this.game.time.time, 30, 120)
 		
@@ -181,6 +199,10 @@ BasicGame.Game.prototype = {
         	enemy.game.debug.body(enemy);
     	});
   		*/
+	},
+
+	openMenu: function () {
+		this.state.start('MainMenu');
 	},
 
 	quitGame: function (pointer) {

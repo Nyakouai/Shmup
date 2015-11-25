@@ -1,6 +1,29 @@
+/*
+ * ENSICAEN
+ * 6 Boulevard Marechal Juin 
+ * F-14050 Caen Cedex 
+ * 
+ * This file is owned by ENSICAEN students.
+ * No portion of this document may be reproduced, copied
+ * or revised without written permission of the authors.
+*/
+
+/**
+ * @fileOverview Boot sequence
+ * @author Bruyère Julien
+ * @version 0.2
+ */
+
+/**
+ * @class BasicGame
+ */
 var BasicGame = {
 };
 
+/**
+ * @class Boot
+ * @param {Game} game accessor of the Phaser's game object
+ */
 BasicGame.Boot = function (game) {
 
 };

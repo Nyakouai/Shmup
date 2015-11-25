@@ -5,7 +5,8 @@ Player = function(game) {
 	this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
 
 	// Physic
-	this.speed = 200;
+	this.speed = 300;
+	this.life = 3;
 
 	game.physics.arcade.enable(this);
 	this.anchor.setTo(0.5, 0.5);
@@ -58,7 +59,7 @@ Player.prototype.update = function() {
 	}
 	
 	if (game.input.activePointer.isDown &&
-		game.physics.arcade.distanceToPointer(this)>15) 
+		game.physics.arcade.distanceToPointer(this)>5) 
 	{
 		game.physics.arcade.moveToPointer(this, this.speed, game.input.activePointer, 500);
 	}
@@ -67,6 +68,10 @@ Player.prototype.update = function() {
 	{
 		this.weapons[this.weaponLevel].fire(this);
 	}
+};
+
+Player.prototype.takeDamage = function() {
+	this.life--;
 };
 	
 Player.prototype.launchBomb = function() {
