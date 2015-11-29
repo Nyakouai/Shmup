@@ -68,6 +68,8 @@ BasicGame.Game.prototype = {
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
+		enemies.push(new Enemies.EnemyTower(this.game));
+		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
 /*
     	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
@@ -84,7 +86,7 @@ BasicGame.Game.prototype = {
 		score=0;
 		scoreText = this.add.text(10, 600-40, 'Score: 0', 
 			{ fontSize: '32px', fill: '#000' });
-		playerLifeText = this.add.text(640-100, 600-40, 'Life: 3', 
+		playerLifeText = this.add.text(800-100, 600-40, 'Life: 3', 
 			{ fontSize: '32px', fill: '#000' });
   	},
 
@@ -108,11 +110,11 @@ BasicGame.Game.prototype = {
 			nextRandomEnnemySpawn = this.game.time.time + 5000;
 
 		}*/
-		level.update(enemies[0]);
-
-		enemies[0].forEachExists(function (enemy) {
+		level.update();
+/*
+		enemies[2].forEachExists(function (enemy) {
 			enemy.fire(player);
-		},this);
+		},this);*/
 	},
 /*
 	spawnEnemy1: function () {
@@ -182,7 +184,8 @@ BasicGame.Game.prototype = {
 	render: function () {
 
 		this.game.debug.cameraInfo(this.camera, 32, 32);
-		this.game.debug.text("Current time" + this.game.time.time, 30, 120)
+		this.game.debug.text("Current time: " + this.game.time.time, 30, 120)
+		this.game.debug.text("Progress: " + level.progress, 30, 150)
 		
 		//Debug Hitbox
 		/*

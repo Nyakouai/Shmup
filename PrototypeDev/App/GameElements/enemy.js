@@ -31,13 +31,15 @@ Enemy = function(game, key) {
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
 
     this.weapons = [];
+    this.currentWeapon = 0;
     this.nextShot = 0;
     this.score = 0;
-    this.behaviour = Behaviour.Null(game);
     this.powerup = false;
     this.bomb = false;
 
     this.anchor.set(0.5, 0.5);
+
+    this.behaviour = Behaviour.Null(game);
 
     game.physics.arcade.enable(this);
 
@@ -63,9 +65,9 @@ Enemy.prototype.appear = function(x, y, width, height, speed, health){
 }
 
 Enemy.prototype.fire = function(player){
-	var shotDelay = this.weapons[0].shotDelay;
+	var shotDelay = this.weapons[this.currentWeapon].shotDelay;
 	if(this.game.time.time > this.nextShot){
-		this.weapons[0].fire(this, player);
+		this.weapons[this.currentWeapon].fire(this, player);
 		this.nextShot = this.game.time.time + shotDelay;
 	}
 }
@@ -182,6 +184,94 @@ Enemies.EnemyPowerup.prototype.appear = function(x, y, speed){
 	this.getFirstExists(false).appear(x,y,26,40,speed,this.health);
 }
 
+////////// Tower enemy /////////////
+
+Enemies.EnemyTower = function(game){
+	this.game = game;
+
+	Phaser.Group.call(this, game, game.world, 'EnemyTower', false, true, Phaser.Physics.ARCADE);
+
+	this.health = 50;
+	this.score = 500;
+	//this.speed = 100;
+
+	for (var i = 0; i < 10; i++){
+		this.add(new Enemy(game, 'building1'), true);
+	}
+
+	this.callAll('weapons.push', 'weapons', new Weapon.BulletEnemyTower(game));
+	this.setAll('animation', false);
+    this.setAll('score', this.score);
+    //this.setAll('behaviour', new Behaviour.EnemyPowerup(game));
+    //this.setAll('powerup', true);
+    //this.callAll('animations.add','animations','fly',[0,1],4,true);
+    //this.callAll('animations.add','animations','hit',[0,1,0,1,0,1,0,1],20,false);
+    this.forEach(function (enemy) {
+    	enemy.behaviour = new Behaviour.EnemyTower(game);
+    	//enemy.events.onAnimationComplete.add( function (e) {
+    	//	e.play('fly');
+    	//}, this);
+    });
+
+	return this;
+};
+
+Enemies.EnemyTower.prototype = Object.create(Phaser.Group.prototype);
+Enemies.EnemyTower.prototype.constructor = Enemies.EnemyTower;
+
+Enemies.EnemyTower.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(20, 620);
+	}
+
+	this.getFirstExists(false).appear(x,y,26,40,speed,this.health);
+}
+
+////////// Boss 1 /////////////
+
+Enemies.Boss1 = function(game){
+	this.game = game;
+
+	Phaser.Group.call(this, game, game.world, 'Boss1', false, true, Phaser.Physics.ARCADE);
+
+	this.health = 200;
+	this.score = 2000;
+	//this.speed = 100;
+
+	for (var i = 0; i < 10; i++){
+		this.add(new Enemy(game, 'enemy2'), true);
+	}
+
+	this.callAll('weapons.push', 'weapons', new Weapon.PatternBoss1(game));
+	this.callAll('weapons.push', 'weapons', new Weapon.SpreadBoss1(game));
+	this.setAll('animation', true);
+	this.callAll('scale.setTo', 'scale', 2, 2);
+    this.setAll('score', this.score);
+    //this.setAll('behaviour', new Behaviour.EnemyPowerup(game));
+    //this.setAll('powerup', true);
+    this.callAll('animations.add','animations','fly',[0,1],4,true);
+    this.callAll('animations.add','animations','hit',[0,1,0,1,0,1,0,1],20,false);
+    this.forEach(function (enemy) {
+    	enemy.behaviour = new Behaviour.Boss1(game);
+    	enemy.events.onAnimationComplete.add( function (e) {
+    		e.play('fly');
+    	}, this);
+    });
+
+	return this;
+};
+
+Enemies.Boss1.prototype = Object.create(Phaser.Group.prototype);
+Enemies.Boss1.prototype.constructor = Enemies.Boss1;
+
+Enemies.Boss1.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(20, 620);
+	}
+
+	this.getFirstExists(false).appear(x,y,26,40,speed,this.health);
+}
+
 ////////////////////////////////////////////////
 
 var Behaviour = {};
@@ -230,11 +320,14 @@ Behaviour.Enemy1.prototype.behave = function(enemy, speed){
 Behaviour.Enemy1.prototype.update = function(enemy){
 	enemy.body.x = this.path[this.pi].x;
 	enemy.body.y = this.path[this.pi].y;
-	this.pi++;
 	if(this.pi >= this.path.length){
 		enemy.kill();
 		//delete this;
 		//this.pi = 0;
+	}
+	else{
+		this.pi+=2;
+		enemy.fire(player);
 	}
 }
 
@@ -246,23 +339,75 @@ Behaviour.Enemy1.prototype.reset = function(enemy){
 Behaviour.EnemyPowerup = function(game){
 	this.game = game;
 	this.speed = 0;
-	this.timeLimit = 5000;
+	this.timeLimit = 500;
+	this.timeOnScreen = 0;
 };
 
 Behaviour.EnemyPowerup.prototype.behave = function(enemy, speed){
 	this.speed = speed;
-	this.timeLimit += this.game.time.time;
 }
 
 Behaviour.EnemyPowerup.prototype.update = function(enemy){
-	if(this.game.time.time < this.timeLimit){
+	if(this.timeOnScreen < this.timeLimit){
 		this.game.physics.arcade.moveToXY(enemy,enemy.x,250,this.speed,500);
 	}
 	else{
 		enemy.body.velocity.x = this.speed;
 	}
+	this.timeOnScreen++;
 }
 
 Behaviour.EnemyPowerup.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
+}
+
+/////////
+Behaviour.EnemyTower = function(game){
+	this.game = game;
+	this.speed = 0;
+};
+
+Behaviour.EnemyTower.prototype.behave = function(enemy, speed){
+	this.speed = speed;
+}
+
+Behaviour.EnemyTower.prototype.update = function(enemy){
+	enemy.body.velocity.y = this.speed;
+	enemy.fire(player);
+}
+
+Behaviour.EnemyTower.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
+}
+
+/////////
+Behaviour.Boss1 = function(game){
+	this.game = game;
+	this.speed = 0;
+	this.healthMax = 200;
+	this.timeOnScreen = 0;
+};
+
+Behaviour.Boss1.prototype.behave = function(enemy, speed){
+	this.speed = speed;
+}
+
+Behaviour.Boss1.prototype.update = function(enemy){
+	enemy.body.velocity.y = this.speed;
+	tintDamage(enemy, this.healthMax);
+
+	if(this.timeOnScreen%1000 < 500){
+		enemy.currentWeapon = 1; //Spread
+	}
+	else{
+		enemy.currentWeapon = 0; //Pattern
+	}
+
+	enemy.fire(player);
+
+	this.timeOnScreen++;
+}
+
+Behaviour.Boss1.prototype.reset = function(enemy){
 	this.behave(enemy, this.speed);
 }

@@ -188,3 +188,111 @@ Weapon.BulletEnemy1.prototype.fire = function (source, target) {
 
     this.getFirstExists(false).fire(x, y, angle, this.bulletSpeed, 7, 7, 0, 0);
 };
+
+/* Bullet EnemyTower (11x11) */
+
+Weapon.BulletEnemyTower = function (game) {
+    Phaser.Group.call(this, game, game.world, 'Bullet EnemyTower', false, true, Phaser.Physics.ARCADE);
+
+    this.bulletSpeed = 300;
+    this.shotDelay = 1000;
+
+    for (var i = 0; i < 64; i++)
+    {
+        this.add(new Bullet(game, 'bullet7'), true);
+    }
+
+    return this;
+};
+
+Weapon.BulletEnemyTower.prototype = Object.create(Phaser.Group.prototype);
+Weapon.BulletEnemyTower.prototype.constructor = Weapon.BulletEnemyTower;
+
+Weapon.BulletEnemyTower.prototype.fire = function (source, target) {
+    var x = source.x;
+    var y = source.y;
+    var tx = target.x;
+    var ty = target.y;
+    var angle = angleEnemyPlayer(x,y,tx,ty);
+
+    this.getFirstExists(false).fire(x, y, angle, this.bulletSpeed, 7, 7, 0, 0);
+};
+
+/* Pattern Boss1 */
+
+Weapon.PatternBoss1 = function (game) {
+    Phaser.Group.call(this, game, game.world, 'PatternBoss1', false, true, Phaser.Physics.ARCADE);
+
+    this.bulletSpeed = 200;
+    this.shotDelay = 25;
+
+    this.pattern = Phaser.ArrayUtils.numberArrayStep(-800, 800, 105);
+    this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(800, -800, -105));
+
+    this.patternIndex = 0;
+
+    for (var i = 0; i < 64; i++)
+    {
+        this.add(new Bullet(game, 'bullet7'), true);
+    }
+
+    return this;
+};
+
+Weapon.PatternBoss1.prototype = Object.create(Phaser.Group.prototype);
+Weapon.PatternBoss1.prototype.constructor = Weapon.PatternBoss1;
+
+Weapon.PatternBoss1.prototype.fire = function (source, target) {
+    var x = source.x;
+    var y = source.y-20;
+
+    this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, 7, 7, 
+        0, this.pattern[this.patternIndex]);
+
+    this.patternIndex++;
+
+    if (this.patternIndex == this.pattern.length)
+    {
+        this.patternIndex = 0;
+    }
+};
+
+/* Spread Boss1 */
+
+Weapon.SpreadBoss1 = function (game) {
+    Phaser.Group.call(this, game, game.world, 'SpreadBoss1', false, true, Phaser.Physics.ARCADE);
+
+    this.bulletSpeed = 200;
+    this.shotDelay = 1000;
+
+    for (var i = 0; i < 90; i++)
+    {
+        this.add(new Bullet(game, 'bullet7'), true);
+    }
+
+    return this;
+};
+
+Weapon.SpreadBoss1.prototype = Object.create(Phaser.Group.prototype);
+Weapon.SpreadBoss1.prototype.constructor = Weapon.SpreadBoss1;
+
+Weapon.SpreadBoss1.prototype.fire = function (source, target) {
+    var x = source.x;
+    var y = source.y-40;
+    var tx = target.x;
+    var ty = target.y;
+    var angle = angleEnemyPlayer(x,y,tx,ty);
+    var rand = this.game.rnd.integerInRange(-5,5);
+
+    //this.getFirstExists(false).fire(x, y, angle, this.bulletSpeed, 7, 7, 0, 0);
+
+    this.getFirstExists(false).fire(x, y, 50+rand, this.bulletSpeed, 7, 7, 0, 0);
+    //this.getFirstExists(false).fire(x, y, 60+rand, this.bulletSpeed, 7, 7, 0, 0);
+    this.getFirstExists(false).fire(x, y, 70+rand, this.bulletSpeed, 7, 7, 0, 0);
+    //this.getFirstExists(false).fire(x, y, 80+rand, this.bulletSpeed, 7, 7, 0, 0);
+    this.getFirstExists(false).fire(x, y, 90+rand, this.bulletSpeed, 7, 7, 0, 0);
+    //this.getFirstExists(false).fire(x, y, 100+rand, this.bulletSpeed, 7, 7, 0, 0);
+    this.getFirstExists(false).fire(x, y, 110+rand, this.bulletSpeed, 7, 7, 0, 0);
+    //this.getFirstExists(false).fire(x, y, 120+rand, this.bulletSpeed, 7, 7, 0, 0);
+    this.getFirstExists(false).fire(x, y, 130+rand, this.bulletSpeed, 7, 7, 0, 0);
+};

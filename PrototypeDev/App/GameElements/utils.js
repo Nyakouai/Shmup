@@ -20,3 +20,16 @@ function angleEnemyPlayer(x, y, tx, ty){
 
 	return angle;
 }
+
+function tintDamage(enemy, healthMax){
+	var ratio = Math.floor(((enemy.health / healthMax) * Math.pow(16, 2))-1);
+	var ratioHex = ratio.toString(16); 	// 0x????
+	if(ratio<16){
+		ratioHex = "0" + ratioHex;
+	}
+
+	var tint =  Math.pow(16, 2)-1;
+	var tintHex = tint.toString(16);	// 0xFF
+
+	enemy.tint = "0x" + tintHex + ratioHex + ratioHex;		// 0xFF????
+}
