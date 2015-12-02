@@ -28,13 +28,14 @@ BasicGame.Preloader.prototype = {
     var dir = 'App/Assets/';
 
     this.load.image('menuBackground', dir+'mainMenuBackground.png');
-    this.load.image('player', dir+'player.png');
     this.load.image('background', dir+'Background/niveau1.png');
 
     this.load.spritesheet('enemy1', dir+'Enemies/enemy1.png', 89, 82, 4);
     this.load.spritesheet('enemy2', dir+'Enemies/enemy2.png', 59, 63, 2);
     this.load.spritesheet('enemy3', dir+'Enemies/enemy3.png', 76, 75, 2);
     this.load.image('building1', dir+'Enemies/building1.png');
+    
+    this.load.image('player', dir+'player.png');
     
     for (var i = 1; i <= 11; i++)
     {

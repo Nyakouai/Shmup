@@ -37,7 +37,7 @@ Level.prototype.update = function() {
 	if(this.progress == 0){
 		this.enemies[2].appear(700, 100, 0);
 		this.enemies[2].appear(100, 100, 0);
-		this.enemies[3].appear(400, 100, 0);
+		this.enemies[3].appear(400, 100, 140);
 	}
 
 	this.progress++;

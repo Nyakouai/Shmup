@@ -234,7 +234,7 @@ Enemies.Boss1 = function(game){
 
 	Phaser.Group.call(this, game, game.world, 'Boss1', false, true, Phaser.Physics.ARCADE);
 
-	this.health = 200;
+	this.health = 300;
 	this.score = 2000;
 	//this.speed = 100;
 
@@ -244,6 +244,8 @@ Enemies.Boss1 = function(game){
 
 	this.callAll('weapons.push', 'weapons', new Weapon.PatternBoss1(game));
 	this.callAll('weapons.push', 'weapons', new Weapon.SpreadBoss1(game));
+	this.callAll('weapons.push', 'weapons', new Weapon.HomingBoss1(game));
+	this.callAll('weapons.push', 'weapons', new Weapon.StraightBoss1(game));
 	this.setAll('animation', true);
 	this.callAll('scale.setTo', 'scale', 2, 2);
     this.setAll('score', this.score);
@@ -384,7 +386,7 @@ Behaviour.EnemyTower.prototype.reset = function(enemy){
 Behaviour.Boss1 = function(game){
 	this.game = game;
 	this.speed = 0;
-	this.healthMax = 200;
+	this.healthMax = 300;
 	this.timeOnScreen = 0;
 };
 
@@ -393,17 +395,45 @@ Behaviour.Boss1.prototype.behave = function(enemy, speed){
 }
 
 Behaviour.Boss1.prototype.update = function(enemy){
-	enemy.body.velocity.y = this.speed;
 	tintDamage(enemy, this.healthMax);
-
-	if(this.timeOnScreen%1000 < 500){
-		enemy.currentWeapon = 1; //Spread
+	if(this.timeOnScreen%2000 < 1000){
+		enemy.body.velocity.y = 0;
+		if(this.timeOnScreen%400 < 200){
+			enemy.currentWeapon = 1; //Spread shot
+		}
+		else{
+			enemy.currentWeapon = 0; //Pattern shot
+		}
+		enemy.fire(player);
 	}
 	else{
-		enemy.currentWeapon = 0; //Pattern
+		if(this.timeOnScreen%2000 < 1100){
+			this.game.physics.arcade.moveToXY(enemy,enemy.x,90,this.speed,100);
+			if(this.timeOnScreen%2000 < 1050){
+				enemy.currentWeapon = 3; //StraightShot
+				enemy.fire(player);
+			}
+		}
+		else{
+			enemy.currentWeapon = 2; //Homing shot
+			if(this.timeOnScreen%2000 < 1800){
+				if(enemy.y > 501 || enemy.y < 499){
+					this.game.physics.arcade.moveToXY(enemy,enemy.x,500,this.speed,400);
+				}
+				else{
+					enemy.fire(player);
+				}
+			}
+			else{
+				if(enemy.y>100){
+					enemy.body.velocity.y = -this.speed;
+				}
+				else{
+					enemy.body.velocity.y = 0;
+				}
+			}
+		}
 	}
-
-	enemy.fire(player);
 
 	this.timeOnScreen++;
 }
