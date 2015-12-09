@@ -49,39 +49,19 @@ BasicGame.Game.prototype = {
 		level = new Level(this.game);
 
 		player = new Player(this.game);
-		/*
-		gEnnemies = this.add.group();
-		gEnnemies.enableBody = true;
-		
-		new Ennemy(this, gEnnemies, 60, 50, 'enemy1');
-		new Ennemy(this, gEnnemies, 20, 100, 'enemy1');
-		new Ennemy(this, gEnnemies, 170, 150, 'enemy2');
-		new Ennemy(this, gEnnemies, 230, 150, 'enemy2');
-		new Ennemy(this, gEnnemies, 280, 50, 'enemy3');
-		new Ennemy(this, gEnnemies, 330, 100, 'enemy3');
 
-		new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
-		new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
-
-		nextRandomEnnemySpawn = this.game.time.time + 5000;
-*/
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
+		enemies.push(new Enemies.Enemy2(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
-		enemies.push(new Enemies.EnemyTower(this.game));
+		enemies.push(new Enemies.EnemyTowerBoss(this.game));
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
-/*
-    	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
-    	this.game.time.events.repeat(5000, 100, this.spawnEnemy2, this);
-*/
     
     	powerupItems = new Collectible.Powerup(this.game);
     	powerupItems.enableBody = true;
     	bombItems = new Collectible.Bomb(this.game);
     	bombItems.enableBody = true;
-		
-		//new Structure(game, gEnnemies, 300, 200, 'building1');
 		
 		score=0;
 		scoreText = this.add.text(10, 600-40, 'Score: 0', 
@@ -108,29 +88,9 @@ BasicGame.Game.prototype = {
     	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
 
 		//player.update();
-		/*
-		if(this.game.time.time > nextRandomEnnemySpawn)
-		{
-			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
-
-			nextRandomEnnemySpawn = this.game.time.time + 5000;
-
-		}*/
 		level.update();
-/*
-		enemies[2].forEachExists(function (enemy) {
-			enemy.fire(player);
-		},this);*/
-	},
-/*
-	spawnEnemy1: function () {
-		enemies[0].appear();
 	},
 
-	spawnEnemy2: function () {
-		enemies[1].appear();
-	},
-*/
 	/**
    	 * Handle collisions between a bullet and an ennemy
    	 * @param  {Bullet} bullet The bullet to test 
@@ -143,7 +103,7 @@ BasicGame.Game.prototype = {
 		
 		enemy.damage(bullet.power);
 	
-		if(enemy.health > 0){
+		if(enemy.alive){
 			enemy.play('hit');
 		}
 		else{

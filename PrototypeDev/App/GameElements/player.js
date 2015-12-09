@@ -115,6 +115,7 @@ Player.prototype.takeDamage = function() {
 		this.reset(this.game.world.width/2, 620);
 		this.appearing = true;
 		this.exists = true;
+		this.weaponLevel = 0;
 	}, this);
 	//this.game.time.create(1000, this.respawn, this);
 };
