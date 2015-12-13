@@ -29,6 +29,7 @@ BasicGame.Game = function (game) {
 	var score;
 	var scoreText;
 	var playerLifeText;
+	var bombText;
 
 	//var nextRandomEnnemySpawn;
 };
@@ -53,7 +54,9 @@ BasicGame.Game.prototype = {
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
 		enemies.push(new Enemies.Enemy2(this.game));
+		enemies.push(new Enemies.Enemy3(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
+		enemies.push(new Enemies.EnemyBomb(this.game));
 		enemies.push(new Enemies.EnemyTowerBoss(this.game));
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
@@ -66,7 +69,9 @@ BasicGame.Game.prototype = {
 		score=0;
 		scoreText = this.add.text(10, 600-40, 'Score: 0', 
 			{ fontSize: '32px', fill: '#000' });
-		playerLifeText = this.add.text(800-100, 600-40, 'Life: 3', 
+		playerLifeText = this.add.text(800-100, 600-80, 'Life: 3', 
+			{ fontSize: '32px', fill: '#000' });
+		bombText = this.add.text(800-150, 600-40, 'Bombs: 3', 
 			{ fontSize: '32px', fill: '#000' });
   	},
 

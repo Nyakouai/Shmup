@@ -146,6 +146,7 @@ Player.prototype.launchBomb = function() {
     	this.countBombs--;
     	fireball.fire(this);
     	this.cooldown = true;
+    	bombText.text = 'Bombs: ' + this.countBombs;
 	}
 
 };

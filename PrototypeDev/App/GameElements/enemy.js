@@ -157,6 +157,49 @@ Enemies.Enemy2.prototype.appear = function(x, y, speed){
 	this.getFirstExists(false).appear(x,y,40,40,speed,this.health);
 }
 
+////////// Straight enemy /////////////
+
+Enemies.Enemy3 = function(game){
+	this.game = game;
+
+	Phaser.Group.call(this, game, game.world, 'Enemy3', false, true, Phaser.Physics.ARCADE);
+
+	this.health = 3;
+	this.score = 50;
+	//this.speed = 60;
+
+	for (var i = 0; i < 10; i++){
+		this.add(new Enemy(game, 'enemy1'), true);
+	}
+
+	//this.callAll('weapons.push', 'weapons', new Weapon.BulletEnemy2(game));
+	this.setAll('animation', true);
+    this.setAll('score', this.score);
+    this.setAll('tint', 0xFF0000);
+    //this.setAll('behaviour', new Behaviour.Enemy3(game));
+    this.callAll('animations.add','animations','fly',[0,1,2,3],4,true);
+    this.callAll('animations.add','animations','hit',[0,1,2,3,0,1,2,3],20,false);
+    this.forEach(function (enemy) {
+    	enemy.behaviour = new Behaviour.Enemy3(game);
+    	enemy.events.onAnimationComplete.add( function (e) {
+    		e.play('fly');
+    	}, this);
+    });
+
+	return this;
+};
+
+Enemies.Enemy3.prototype = Object.create(Phaser.Group.prototype);
+Enemies.Enemy3.prototype.constructor = Enemies.Enemy3;
+
+Enemies.Enemy3.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(100, 700);
+	}
+
+	this.getFirstExists(false).appear(x,y,40,40,speed,this.health);
+}
+
 ////////// Powerup enemy /////////////
 
 Enemies.EnemyPowerup = function(game){
@@ -193,6 +236,50 @@ Enemies.EnemyPowerup.prototype = Object.create(Phaser.Group.prototype);
 Enemies.EnemyPowerup.prototype.constructor = Enemies.EnemyPowerup;
 
 Enemies.EnemyPowerup.prototype.appear = function(x, y, speed){
+	if(x=="random"){
+		x = this.game.rnd.integerInRange(20, 620);
+	}
+
+	this.getFirstExists(false).appear(x,y,26,40,speed,this.health);
+}
+
+////////// Bomb enemy /////////////
+
+Enemies.EnemyBomb = function(game){
+	this.game = game;
+
+	Phaser.Group.call(this, game, game.world, 'EnemyBomb', false, true, Phaser.Physics.ARCADE);
+
+	this.health = 5;
+	this.score = 50;
+	//this.speed = 100;
+
+	for (var i = 0; i < 10; i++){
+		this.add(new Enemy(game, 'enemy3'), true);
+	}
+
+	//this.callAll('weapons.push', 'weapons', new Weapon.BulletEnemy1(game));
+	this.setAll('animation', true);
+    this.setAll('score', this.score);
+    this.setAll('tint', 0x00FF00);
+    //this.setAll('behaviour', new Behaviour.EnemyBomb(game));
+    this.setAll('bomb', true);
+    this.callAll('animations.add','animations','fly',[0,1],4,true);
+    this.callAll('animations.add','animations','hit',[0,1,0,1,0,1,0,1],20,false);
+    this.forEach(function (enemy) {
+    	enemy.behaviour = new Behaviour.EnemyBomb(game);
+    	enemy.events.onAnimationComplete.add( function (e) {
+    		e.play('fly');
+    	}, this);
+    });
+
+	return this;
+};
+
+Enemies.EnemyBomb.prototype = Object.create(Phaser.Group.prototype);
+Enemies.EnemyBomb.prototype.constructor = Enemies.EnemyBomb;
+
+Enemies.EnemyBomb.prototype.appear = function(x, y, speed){
 	if(x=="random"){
 		x = this.game.rnd.integerInRange(20, 620);
 	}
@@ -383,6 +470,27 @@ Behaviour.Enemy2.prototype.reset = function(enemy){
 }
 
 /////////
+Behaviour.Enemy3 = function(game){
+	this.game = game;
+	this.speed = 0;
+	this.target = 400;
+};
+
+Behaviour.Enemy3.prototype.behave = function(enemy, speed){
+	this.speed = speed;
+	this.target = this.game.rnd.integerInRange(20, this.game.width-20);
+	enemy.rotation = this.game.physics.arcade.moveToXY(enemy, this.target, this.game.height, speed) - Math.PI/2;
+}
+
+Behaviour.Enemy3.prototype.update = function(enemy){
+	enemy.body.velocity.y = this.speed;
+}
+
+Behaviour.Enemy3.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
+}
+
+/////////
 Behaviour.EnemyPowerup = function(game){
 	this.game = game;
 	this.speed = 0;
@@ -405,6 +513,32 @@ Behaviour.EnemyPowerup.prototype.update = function(enemy){
 }
 
 Behaviour.EnemyPowerup.prototype.reset = function(enemy){
+	this.behave(enemy, this.speed);
+}
+
+/////////
+Behaviour.EnemyBomb = function(game){
+	this.game = game;
+	this.speed = 0;
+	this.timeLimit = 500;
+	this.timeOnScreen = 0;
+};
+
+Behaviour.EnemyBomb.prototype.behave = function(enemy, speed){
+	this.speed = speed;
+}
+
+Behaviour.EnemyBomb.prototype.update = function(enemy){
+	if(this.timeOnScreen < this.timeLimit){
+		this.game.physics.arcade.moveToXY(enemy,enemy.x,250,this.speed,500);
+	}
+	else{
+		enemy.body.velocity.x = this.speed;
+	}
+	this.timeOnScreen++;
+}
+
+Behaviour.EnemyBomb.prototype.reset = function(enemy){
 	this.behave(enemy, this.speed);
 }
 
