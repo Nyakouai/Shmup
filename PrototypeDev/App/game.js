@@ -109,7 +109,8 @@ BasicGame.Game.prototype = {
 		enemy.damage(bullet.power);
 	
 		if(enemy.alive){
-			enemy.play('hit');
+			//enemy.play('hit');
+			this.time.events.repeat(50,2,blink,this,enemy);
 		}
 		else{
 			if(enemy.powerup){

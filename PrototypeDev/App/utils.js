@@ -33,3 +33,12 @@ function tintDamage(enemy, healthMax){
 
 	enemy.tint = "0x" + tintHex + ratioHex + ratioHex;		// 0xFF????
 }
+
+function blink(sprite) {
+	if (sprite.tint == 0xFFFFFF) {
+        sprite.tint = 0xFF0000;
+    }
+    else {
+        sprite.tint = 0xFFFFFF;
+    }
+};

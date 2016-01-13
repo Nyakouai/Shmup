@@ -69,10 +69,14 @@ Player.prototype.update = function() {
 			this.body.velocity.y = this.speed;
 		}
 	
-		if (game.input.activePointer.isDown &&
-			game.physics.arcade.distanceToPointer(this)>5) 
+		if (game.input.activePointer.isDown)
 		{
-			game.physics.arcade.moveToPointer(this, this.speed, game.input.activePointer, 500);
+			this.weapons[this.weaponLevel].fire(this);	
+			
+			if(game.physics.arcade.distanceToPointer(this)>5) 
+			{
+				game.physics.arcade.moveToPointer(this, this.speed, game.input.activePointer, 500);
+			}
 		}
 
 		if (game.input.keyboard.isDown(Phaser.Keyboard.A))
