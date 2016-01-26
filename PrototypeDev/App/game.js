@@ -29,8 +29,9 @@ BasicGame.Game = function (game) {
 	var score;
 	var scoreText;
 	var playerLifeText;
+	var bombText;
 
-	//var nextRandomEnnemySpawn;
+	var paused;
 };
 
 BasicGame.Game.prototype = {
@@ -43,38 +44,22 @@ BasicGame.Game.prototype = {
   		this.game.renderer.renderSession.roundPixels = true;
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 
-		var menu = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-		menu.onDown.add(this.openMenu, this);
+		var pause = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
+		pause.onDown.add(this.pause, this);
+
+		paused = false;
 		
 		level = new Level(this.game);
 
 		player = new Player(this.game);
-		/*
-		gEnnemies = this.add.group();
-		gEnnemies.enableBody = true;
-		
-		new Ennemy(this, gEnnemies, 60, 50, 'enemy1');
-		new Ennemy(this, gEnnemies, 20, 100, 'enemy1');
-		new Ennemy(this, gEnnemies, 170, 150, 'enemy2');
-		new Ennemy(this, gEnnemies, 230, 150, 'enemy2');
-		new Ennemy(this, gEnnemies, 280, 50, 'enemy3');
-		new Ennemy(this, gEnnemies, 330, 100, 'enemy3');
 
-		new Ennemy(this, gEnnemies, 100, 350, 'enemy2');
-		new Ennemy(this, gEnnemies, 300, 350, 'enemy2');
-
-		nextRandomEnnemySpawn = this.game.time.time + 5000;
-*/
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
 		enemies.push(new Enemies.EnemyTower(this.game));
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
-/*
-    	this.game.time.events.repeat(2000, 100, this.spawnEnemy1, this);
-    	this.game.time.events.repeat(5000, 100, this.spawnEnemy2, this);
-*/
+
     
     	powerupItems = new Collectible.Powerup(this.game);
     	powerupItems.enableBody = true;
@@ -95,36 +80,16 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
-		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
-		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
-		
-    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
-    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
-
-		//player.update();
-		/*
-		if(this.game.time.time > nextRandomEnnemySpawn)
+		if(!this.paused)
 		{
-			new Ennemy(this, gEnnemies, 60, 200, 'enemy1');
-
-			nextRandomEnnemySpawn = this.game.time.time + 5000;
-
-		}*/
-		level.update();
-/*
-		enemies[2].forEachExists(function (enemy) {
-			enemy.fire(player);
-		},this);*/
-	},
-/*
-	spawnEnemy1: function () {
-		enemies[0].appear();
+			this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
+			this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
+			
+	    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
+	    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
+		}
 	},
 
-	spawnEnemy2: function () {
-		enemies[1].appear();
-	},
-*/
 	/**
    	 * Handle collisions between a bullet and an ennemy
    	 * @param  {Bullet} bullet The bullet to test 
@@ -157,7 +122,6 @@ BasicGame.Game.prototype = {
 	
 	playerCollisionHandler: function (player, ennemy) {
 		player.takeDamage();
-		ennemy.kill();
 		
 		playerLifeText.text = 'Life: ' + player.life;
 	},
@@ -204,8 +168,75 @@ BasicGame.Game.prototype = {
   		*/
 	},
 
-	openMenu: function () {
-		this.state.start('MainMenu');
+	pause: function () {
+		if(!this.paused)
+		{
+			this.paused = true;
+			level.autoScroll(0, 0);
+
+			var grayfilter = this.game.add.filter('Gray');
+
+			this.world.filters = [grayfilter];
+			
+			this.loadingText = this.add.text(this.game.width / 2, this.game.height / 2 + 80, "Press P or tap/click game to resume", { font: "20px monospace", fill: "#fff" });
+	    	this.loadingText.anchor.setTo(0.5, 0.5);
+
+	    	this.menu = this.game.add.sprite(400, 300, 'button');
+	    	this.menu.anchor.setTo(0.5, 0.5);
+
+	    	var x1 = 400 - 200/2, x2 = 400 + 200/2,
+                y1 = 300 - 150/2, y2 = 300 + 150/2;
+
+            if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
+            	var choisemap = ['save', 'load'];
+
+            	var x = event.x - x1,
+                    y = event.y - y1;
+
+                var choise = Math.floor(x) + Math.floor(y / 75);
+
+                if(choise=='save')
+                	this.player.save();
+                else if(choise=='load')
+                	this.player.load();
+            }
+
+	    	/*var saveButton = this.game.add.button(this.game.world.centerX-40, 200, 
+	    		'button', this.save, this, 2, 1, 0);
+	    	saveButton.inputEnabled = true;
+
+	    	saveButton.onInputOver.add(this.save, this);*/
+    	}
+    	else
+    	{
+
+
+			this.loadingText.destroy();
+
+			this.world.filters = null;
+			this.menu.destroy();
+
+			level.autoScroll(0, 50);
+			this.paused = false;
+		}
+	},
+
+	save: function() {
+		if(!store.enabled) {
+    		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
+    		return;
+    	}
+
+	    player.save();
+	},
+
+	load: function() {
+		if(!store.enabled) {
+    		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
+    		return;
+    	}
+
+	    player.load();
 	},
 
 	quitGame: function (pointer) {

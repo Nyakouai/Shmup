@@ -40,5 +40,10 @@ Level.prototype.update = function() {
 		this.enemies[3].appear(400, 100, 0);
 	}
 
+	/*for(var i = 0; i < this.enemies.length; i++)
+		this.enemies[i].forEach(function (enemy) {
+        	enemy.updates();
+    	});*/
+
 	this.progress++;
 };

@@ -93,3 +93,17 @@ Player.prototype.bombCooldown = function() {
         this.tint = 0xFFFFFF;
     }
 };
+
+Player.prototype.save = function() {
+	store.set('x', this.body.x);
+	store.set('y', this.body.y);
+};
+
+Player.prototype.load = function() {
+	this.body.x = store.get('x');
+	this.body.y = store.get('y');
+};
+
+//Player.prototype.destructor = function() {
+
+//}
