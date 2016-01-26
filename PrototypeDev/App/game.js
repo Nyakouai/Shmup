@@ -55,23 +55,25 @@ BasicGame.Game.prototype = {
 
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
+		enemies.push(new Enemies.Enemy2(this.game));
+		enemies.push(new Enemies.Enemy3(this.game));
 		enemies.push(new Enemies.EnemyPowerup(this.game));
-		enemies.push(new Enemies.EnemyTower(this.game));
+		enemies.push(new Enemies.EnemyBomb(this.game));
+		enemies.push(new Enemies.EnemyTowerBoss(this.game));
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
-
     
     	powerupItems = new Collectible.Powerup(this.game);
     	powerupItems.enableBody = true;
     	bombItems = new Collectible.Bomb(this.game);
     	bombItems.enableBody = true;
 		
-		//new Structure(game, gEnnemies, 300, 200, 'building1');
-		
 		score=0;
 		scoreText = this.add.text(10, 600-40, 'Score: 0', 
 			{ fontSize: '32px', fill: '#000' });
-		playerLifeText = this.add.text(800-100, 600-40, 'Life: 3', 
+		playerLifeText = this.add.text(800-100, 600-80, 'Life: 3', 
+			{ fontSize: '32px', fill: '#000' });
+		bombText = this.add.text(800-150, 600-40, 'Bombs: 3', 
 			{ fontSize: '32px', fill: '#000' });
   	},
 
@@ -80,6 +82,7 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
+
 		if(!this.paused)
 		{
 			this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
@@ -88,6 +91,21 @@ BasicGame.Game.prototype = {
 	    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
 	    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
 		}
+
+		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
+		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
+		
+		for(var i=0; i<enemies.length; i++){
+			enemies[i].forEach(function (enemy){
+				this.physics.arcade.overlap(player, enemy.weapons, this.bulletEnemyCollisionHandler, null, this)
+			},this);
+		}
+
+    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
+    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
+
+		//player.update();
+		level.update();
 	},
 
 	/**
@@ -102,8 +120,9 @@ BasicGame.Game.prototype = {
 		
 		enemy.damage(bullet.power);
 	
-		if(enemy.health > 0){
-			enemy.play('hit');
+		if(enemy.alive){
+			//enemy.play('hit');
+			this.time.events.repeat(50,2,blink,this,enemy);
 		}
 		else{
 			if(enemy.powerup){
@@ -120,10 +139,22 @@ BasicGame.Game.prototype = {
 		scoreText.text = 'Score: ' + score;
 	},
 	
-	playerCollisionHandler: function (player, ennemy) {
-		player.takeDamage();
-		
-		playerLifeText.text = 'Life: ' + player.life;
+
+	playerCollisionHandler: function (player, enemy) {
+		if(!player.cooldown && !player.appearing){
+			player.takeDamage();
+			//ennemy.kill();
+			playerLifeText.text = 'Life: ' + player.life;
+		}
+	},
+
+	bulletEnemyCollisionHandler: function(player, bullet){
+		if(!player.cooldown && !player.appearing){
+			player.takeDamage();
+			bullet.kill();
+			playerLifeText.text = 'Life: ' + player.life;
+		}
+
 	},
 
 	playerPowerup: function(player, powerup) {
@@ -148,22 +179,27 @@ BasicGame.Game.prototype = {
 	render: function () {
 
 		this.game.debug.cameraInfo(this.camera, 32, 32);
-		this.game.debug.text("Current time: " + this.game.time.time, 30, 120)
-		this.game.debug.text("Progress: " + level.progress, 30, 150)
+		this.game.debug.text("Current time: " + this.game.time.time, 30, 120);
+		this.game.debug.text("Progress: " + level.progress, 30, 150);
 		
 		//Debug Hitbox
-		/*
-		this.game.debug.body(player);
-		player.weapons[player.weaponLevel].forEach(function (bullet) {
+		
+		//this.game.debug.body(player);
+		/*player.weapons[player.weaponLevel].forEach(function (bullet) {
         	bullet.game.debug.body(bullet);
     	});
     
     	player.weapons[3].forEach(function (bullet) {
         	bullet.game.debug.body(bullet);
     	});
-
-    	enemies[0].forEach(function (enemy) {
+		
+    	enemies[3].forEach(function (enemy) {
         	enemy.game.debug.body(enemy);
+        	for(var i=0; i<4; i++){
+        		enemy.weapons[i].forEach(function (bullet){
+        			bullet.game.debug.body(bullet);
+        		});
+        	}
     	});
   		*/
 	},

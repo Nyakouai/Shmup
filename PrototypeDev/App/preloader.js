@@ -29,10 +29,6 @@ BasicGame.Preloader.prototype = {
 
     // Menu
     this.load.image('menuBackground', dir+'mainMenuBackground.png');
-    //this.load.spritesheet('button', dir+'buttons.png', 80, 60/3);
-    this.load.image('button', dir+'test.png', 200, 150);
-
-    //World
     this.load.image('background', dir+'Background/niveau1.png');
 
     // Player
@@ -44,7 +40,8 @@ BasicGame.Preloader.prototype = {
     this.load.spritesheet('enemy3', dir+'Enemies/enemy3.png', 76, 75, 2);
     this.load.image('building1', dir+'Enemies/building1.png');
     
-    // Effects
+
+	// Effects
     for (var i = 1; i <= 11; i++)
     {
         this.load.image('bullet' + i, dir+'Effects/bullet' + i + '.png');
