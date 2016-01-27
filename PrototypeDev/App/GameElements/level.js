@@ -24,7 +24,7 @@ Level.prototype.update = function() {
 	 	-number		: 1
 	 	-spawn(x,y) : (540, -30)
 	 	-speed		: 100
-	*********************/
+	*********************
 	if(this.progress == 200){
 		this.game.time.events.repeat(500, 10, this.enemies[0].appear, 
 			this.enemies[0], 100, -30, 80);
@@ -35,12 +35,12 @@ Level.prototype.update = function() {
 		//	this.enemies[1], "random", -30, 80);
 	}
 
-	/****** Vague 2 ******
+	****** Vague 2 ******
 	 *Enemy2:
 	 	-number		: 10
 	 	-spawn(x,y)	: (rand, -30)
 	 	-speed		: 100
-	*********************/
+	*********************
 	if(this.progress == 1500){
 		this.game.time.events.repeat(1000, 10, this.enemies[1].appear, 
 			this.enemies[1], "random", -30, 100);
@@ -50,12 +50,12 @@ Level.prototype.update = function() {
 	}
 
 	if(this.test){
-		/****** Vague 3 ******
+		****** Vague 3 ******
 		 *Enemy3:
 		 	-number		: 20
 		 	-spawn(x,y)	: (rand, -30)
 		 	-speed		: 400
-		*********************/
+		*********************
 		if(this.progress == 2500){
 			this.game.time.events.repeat(300, 40, this.enemies[2].appear, 
 				this.enemies[2], "random", -30, 400);
@@ -64,7 +64,7 @@ Level.prototype.update = function() {
 			this.enemies[4].appear(540, -30, 100);
 		}
 
-		/****** BOSS ******
+		****** BOSS ******
 		 *EnemyTowerBoss:
 		 	-number		: 2
 		 	-spawn(x,y)	: (100, -20) & (700, -20)
@@ -73,7 +73,7 @@ Level.prototype.update = function() {
 		 	-number		: 1
 		 	-spawn(x,y) : (400, 100)
 		 	-speed		: 140
-		*******************/
+		*******************
 		if(this.progress == 3500){		
 			this.enemies[5].appear(700, -20, 50);
 			this.enemies[5].appear(100, -20, 50);
@@ -84,12 +84,12 @@ Level.prototype.update = function() {
 		}
 	}
 	else{
-		/****** Vague 3 ******
+		****** Vague 3 ******
 		 *Enemy3:
 		 	-number		: 20
 		 	-spawn(x,y)	: (rand, -30)
 		 	-speed		: 400
-		*********************/
+		*********************
 		if(this.progress == 7500){
 			this.game.time.events.repeat(300, 40, this.enemies[2].appear, 
 				this.enemies[2], "random", -30, 400);
@@ -98,7 +98,7 @@ Level.prototype.update = function() {
 			this.enemies[4].appear(540, -30, 100);
 		}
 
-		/****** BOSS ******
+		****** BOSS ******
 		 *EnemyTowerBoss:
 		 	-number		: 2
 		 	-spawn(x,y)	: (100, -20) & (700, -20)
@@ -107,7 +107,7 @@ Level.prototype.update = function() {
 		 	-number		: 1
 		 	-spawn(x,y) : (400, 100)
 		 	-speed		: 140
-		*******************/
+		*******************
 		if(this.progress == 8500){		
 			this.enemies[5].appear(700, -20, 50);
 			this.enemies[5].appear(100, -20, 50);
@@ -118,10 +118,17 @@ Level.prototype.update = function() {
 		}
 	}
 
-	/*for(var i = 0; i < this.enemies.length; i++)
+	*for(var i = 0; i < this.enemies.length; i++)
 		this.enemies[i].forEach(function (enemy) {
         	enemy.updates();
     	});*/
+	if(this.progress == 200){
+		//this.game.time.events.repeat(500, 10, this.enemies[0].appear, 
+		//	this.enemies[0], 100, -30, 2);
+		//this.game.time.events.repeat(1000, 10, this.enemies[1].appear, 
+		//	this.enemies[1], "random", -30, 100);
+			this.enemies[2].appear(400, -60, 140);
+	}
 
 	this.progress++;
 };
