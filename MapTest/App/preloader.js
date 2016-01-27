@@ -25,37 +25,7 @@ BasicGame.Preloader = function (game) {
 BasicGame.Preloader.prototype = {
 
   preload: function () {
-    var dir = 'App/Assets/';
-
-    // Menu
-    this.load.image('menuBackground', dir+'mainMenuBackground.png');
-    this.load.image('background', dir+'Background/niveau1.png');
-    this.load.image('button', dir+'button.png');
-
-    // Player
-    this.load.image('player', dir+'player.png');
-
-    // Enemies
-    this.load.spritesheet('enemy1', dir+'Enemies/enemy1.png', 89, 82, 4);
-    this.load.spritesheet('enemy2', dir+'Enemies/enemy2.png', 59, 63, 2);
-    this.load.spritesheet('enemy3', dir+'Enemies/enemy3.png', 76, 75, 2);
-    this.load.image('building1', dir+'Enemies/building1.png');
-    
-
-	// Effects
-    for (var i = 1; i <= 11; i++)
-    {
-        this.load.image('bullet' + i, dir+'Effects/bullet' + i + '.png');
-    }
-    this.load.spritesheet('fireball',dir+'Effects/fireballs.png',28,26);
-    this.load.spritesheet('explosion', dir+'Effects/explosion.png', 54, 56);
-    
-    // Items
-    this.load.image('powerup',dir+'Items/powerup.png');
-    this.load.image('bomb',dir+'Items/bomb.png');
-   
-    // Script
-    this.load.script('gray', 'App/Utils/gray.js');
+    this.load.image('tileset', 'App/Assets/tileset.png');
   },
 
   create: function () {
@@ -75,7 +45,7 @@ BasicGame.Preloader.prototype = {
     //if (this.cache.isSoundDecoded('titleMusic') && this.ready == false)
     //{
     //  this.ready = true;
-      this.state.start('MainMenu');
+      this.state.start('Game');
     //}
 
   }

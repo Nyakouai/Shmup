@@ -47,9 +47,8 @@ BasicGame.Game.prototype = {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 
 		var pause = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-		pause.onDown.add(this.pause, this);
-
-		paused = false;
+		pause.onDown.add(this.pauseGame, this);
+		this.game.input.onDown.add(this.pauseMenu, this);
 		
 		level = new Level(this.game);
 
@@ -93,30 +92,17 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
-
-		if(!this.paused)
-		{
-			this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
-			this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
-			
-	    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
-	    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
-		}
-
 		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
 		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
 		
+    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
+    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
+	
 		for(var i=0; i<enemies.length; i++){
 			enemies[i].forEach(function (enemy){
 				this.physics.arcade.overlap(player, enemy.weapons, this.bulletEnemyCollisionHandler, null, this)
 			},this);
 		}
-
-    	this.physics.arcade.overlap(player, powerupItems, this.playerPowerup, null, this);
-    	this.physics.arcade.overlap(player, bombItems, this.playerBomb, null, this);
-
-		//player.update();
-		level.update();
 	},
 
 	/**
@@ -215,75 +201,70 @@ BasicGame.Game.prototype = {
   		*/
 	},
 
-	pause: function () {
-		if(!this.paused)
+	pauseGame: function () {
+		if(!this.game.paused)
 		{
-			this.paused = true;
+			this.game.paused = true;
 			level.autoScroll(0, 0);
 
 			var grayfilter = this.game.add.filter('Gray');
 
 			this.world.filters = [grayfilter];
 			
-			this.loadingText = this.add.text(this.game.width / 2, this.game.height / 2 + 80, "Press P or tap/click game to resume", { font: "20px monospace", fill: "#fff" });
+			this.loadingText = this.add.text(this.game.width / 2, 100, "Press P or tap/click game to resume", { font: "20px monospace", fill: "#fff" });
 	    	this.loadingText.anchor.setTo(0.5, 0.5);
 
-	    	this.menu = this.game.add.sprite(400, 300, 'button');
-	    	this.menu.anchor.setTo(0.5, 0.5);
+	    	this.saveButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 - 50, 'button');
+	    	this.saveButton.anchor.setTo(0.5, 0.5);
+	    	this.saveText = this.add.text(this.game.width / 2, this.game.height / 2 - 50, "Sauver", { font: "25px monospace", fill: "#000" });
+	    	this.saveText.anchor.setTo(0.5, 0.5);
 
-	    	var x1 = 400 - 200/2, x2 = 400 + 200/2,
-                y1 = 300 - 150/2, y2 = 300 + 150/2;
-
-            if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
-            	var choisemap = ['save', 'load'];
-
-            	var x = event.x - x1,
-                    y = event.y - y1;
-
-                var choise = Math.floor(x) + Math.floor(y / 75);
-
-                if(choise=='save')
-                	this.player.save();
-                else if(choise=='load')
-                	this.player.load();
-            }
-
-	    	/*var saveButton = this.game.add.button(this.game.world.centerX-40, 200, 
-	    		'button', this.save, this, 2, 1, 0);
-	    	saveButton.inputEnabled = true;
-
-	    	saveButton.onInputOver.add(this.save, this);*/
+	    	this.loadButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 50, 'button');
+	    	this.loadButton.anchor.setTo(0.5, 0.5);
+	    	this.loadText = this.add.text(this.game.width / 2, this.game.height / 2 + 50, "Charger", { font: "25px monospace", fill: "#000" });
+	    	this.loadText.anchor.setTo(0.5, 0.5);	    	
     	}
     	else
     	{
-
-
 			this.loadingText.destroy();
+			this.saveButton.destroy();
+			this.saveText.destroy();
+			this.loadButton.destroy();
+			this.loadText.destroy();
 
 			this.world.filters = null;
-			this.menu.destroy();
-
 			level.autoScroll(0, 50);
-			this.paused = false;
+			this.game.paused = false;
 		}
 	},
 
-	save: function() {
-		if(!store.enabled) {
-    		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
-    		return;
+	pauseMenu: function() {
+	    if(this.game.input.x > (this.saveButton.x - (this.saveButton.width/2)) && this.game.input.x < (this.saveButton.x + (this.saveButton.width/2)) 
+	    && this.game.input.y > (this.saveButton.y - (this.saveButton.height/2)) && this.game.input.y < (this.saveButton.y + (this.saveButton.height/2)) ){	
+	   	 	this.saveData();
+	    }
+	    else if(this.game.input.x > (this.loadButton.x - (this.loadButton.width/2)) && this.game.input.x < (this.loadButton.x + (this.loadButton.width/2)) 
+	    && this.game.input.y > (this.loadButton.y - (this.loadButton.height/2)) && this.game.input.y < (this.loadButton.y + (this.loadButton.height/2)) ){	
+        	this.loadData();
     	}
-
-	    player.save();
 	},
 
-	load: function() {
+	saveData: function() {
 		if(!store.enabled) {
     		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
     		return;
     	}
 
-	    player.load();
+	    player.saveData();
+	},
+
+	loadData: function() {
+		if(!store.enabled) {
+    		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
+    		return;
+    	}
+
+	    player.loadData();
 	},
 
 	quitGame: function (pointer) {
