@@ -30,13 +30,17 @@ BasicGame.Game = function (game) {
 	var scoreText;
 	var playerLifeText;
 	var bombText;
+
+	var paused;
+
+    var jsonObj;
 };
 
 BasicGame.Game.prototype = {
 
 	/**
 	 * Constructor of the game
-	 * @public
+	 * x@public
 	 */
 	create: function () {
   		this.game.renderer.renderSession.roundPixels = true;
@@ -49,7 +53,7 @@ BasicGame.Game.prototype = {
 		level = new Level(this.game);
 
 		player = new Player(this.game);
-
+/*
 		enemies = [];
 		enemies.push(new Enemies.Enemy1(this.game));
 		enemies.push(new Enemies.Enemy2(this.game));
@@ -59,7 +63,16 @@ BasicGame.Game.prototype = {
 		enemies.push(new Enemies.EnemyTowerBoss(this.game));
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
-    
+    */
+    	loadJSON(function(response) {
+	  		jsonObj = JSON.parse(response);
+ 		});
+		enemies = [];
+		for(var i=0; i<jsonObj.enemies.length; i++){
+			enemies.push(new EnemyGroup(this.game, jsonObj.enemies[i]));
+		}
+		level.enemies = enemies;
+
     	powerupItems = new Collectible.Powerup(this.game);
     	powerupItems.enableBody = true;
     	bombItems = new Collectible.Bomb(this.game);

@@ -1,0 +1,144 @@
+{"enemies" : [
+	{
+		"id" : "Enemy1",
+		"sprite" : "enemy1",
+		"hitbox" : [40,40],
+		"scale" : [1,1],
+		"animationFrames" : [0,1,2,3],
+		"health" : 5,
+		"score" : 100,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : ["BulletEnemy1"],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : 0, 
+				"type" : "catmull", 
+				"idCatmull" : 0,
+				"pointsX" : [119,99.5,-76.5], 
+				"pointsY" : [-40,455,535] 
+			}
+		]
+	},
+	{
+		"id" : "Enemy2",
+		"sprite" : "enemy1",
+		"hitbox" : [40,40],
+		"scale" : [1,1],
+		"animationFrames" : [0,1,2,3],
+		"health" : 5,
+		"score" : 100,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : ["BulletEnemy2"],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",100],
+				"speed" : "this",
+				"delay" : 400
+			},
+			{ 
+				"time" : [100], 
+				"weapon" : 0, 
+				"type" : "moveToXY", 
+				"XY" : ["this",100],
+				"speed" : "this",
+				"delay" : 400
+			},
+			{ 
+				"time" : [400], 
+				"weapon" : -1, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : "this"
+			}
+		]
+	},
+	{
+		"id" : "Boss1",
+		"sprite" : "enemy2",
+		"hitbox" : [26,40],
+		"scale" : [2,2],
+		"animationFrames" : [0,1],
+		"health" : 300,
+		"score" : 2000,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : true,
+		"weapons" : ["PatternBoss1","SpreadBoss1","HomingBoss1","StraightBoss1"],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",100],
+				"speed" : "this",
+				"delay" : 100
+			},
+			{ 
+				"time" : [100,500,900], 
+				"weapon" : 1, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : 0
+			},
+			{ 
+				"time" : [300,700], 
+				"weapon" : 0, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : 0
+			},
+			{ 
+				"time" : [1100], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",90],
+				"speed" : "this",
+				"delay" : 100
+			},
+			{ 
+				"time" : [1150], 
+				"weapon" : 3, 
+				"type" : "moveToXY", 
+				"XY" : ["this",90],
+				"speed" : "this",
+				"delay" : 100
+			},
+			{ 
+				"time" : [1200], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",500],
+				"speed" : "this",
+				"delay" : 400
+			},
+			{ 
+				"time" : [1400], 
+				"weapon" : 2, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : 0
+			},
+			{ 
+				"time" : [2000], 
+				"weapon" : -1, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : "-this"
+			},
+			{ 
+				"time" : [2175], 
+				"weapon" : -1, 
+				"type" : "restart",
+				"setTime" : 100
+			}
+		]
+	}]
+}

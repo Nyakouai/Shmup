@@ -5,6 +5,7 @@ var Weapon = {};
 
 Weapon.BulletLvl1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet Level 1', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletLvl1";
 
     this.nextFire = 0;
     this.bulletSpeed = 500;
@@ -40,6 +41,7 @@ Weapon.BulletLvl1.prototype.fire = function (source) {
 
 Weapon.BulletLvl2 = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet Level 2', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletLvl2";
 
     this.nextFire = 0;
     this.bulletSpeed = 500;//1000;
@@ -77,6 +79,7 @@ Weapon.BulletLvl2.prototype.fire = function (source) {
 
 Weapon.BulletLvl3 = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet Level 3', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletLvl3";
 
     this.nextFire = 0;
     this.bulletSpeed = 500;//1000;
@@ -114,6 +117,7 @@ Weapon.BulletLvl3.prototype.fire = function (source) {
 
 Weapon.Fireball = function (game) {
     Phaser.Group.call(this, game, game.world, 'Fireball', false, true, Phaser.Physics.ARCADE);
+    this.id = "Fireball";
 
     this.nextFire = 0;
     this.bulletSpeed = 500;
@@ -164,6 +168,7 @@ Weapon.Fireball.prototype.fire = function (source) {
 
 Weapon.BulletEnemy1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet Enemy1', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletEnemy1";
 
     this.bulletSpeed = 200;
     this.shotDelay = 3000;
@@ -193,6 +198,7 @@ Weapon.BulletEnemy1.prototype.fire = function (source, target) {
 
 Weapon.BulletEnemy2 = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet Enemy2', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletEnemy2";
 
     this.bulletSpeed = 200;
     this.shotDelay = 2000;
@@ -231,6 +237,7 @@ Weapon.BulletEnemy2.prototype.fire = function (source, target) {
 
 Weapon.BulletEnemyTowerBoss = function (game) {
     Phaser.Group.call(this, game, game.world, 'Bullet EnemyTowerBoss', false, true, Phaser.Physics.ARCADE);
+    this.id = "BulletEnemyTowerBoss";
 
     this.bulletSpeed = 200;
     this.shotDelay = 2000;
@@ -260,6 +267,7 @@ Weapon.BulletEnemyTowerBoss.prototype.fire = function (source, target) {
 
 Weapon.PatternBoss1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'PatternBoss1', false, true, Phaser.Physics.ARCADE);
+    this.id = "PatternBoss1";
 
     this.bulletSpeed = 200;
     this.shotDelay = 25;
@@ -299,6 +307,7 @@ Weapon.PatternBoss1.prototype.fire = function (source, target) {
 
 Weapon.SpreadBoss1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'SpreadBoss1', false, true, Phaser.Physics.ARCADE);
+    this.id = "SpreadBoss1";
 
     this.bulletSpeed = 200;
     this.shotDelay = 1000;
@@ -339,6 +348,7 @@ Weapon.SpreadBoss1.prototype.fire = function (source, target) {
 
 Weapon.HomingBoss1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'HomingBoss1', false, true, Phaser.Physics.ARCADE);
+    this.id = "HomingBoss1";
 
     this.bulletSpeed = 100;
     this.shotDelay = 1000;
@@ -380,6 +390,7 @@ Weapon.HomingBoss1.prototype.fire = function (source, target) {
 
 Weapon.StraightBoss1 = function (game) {
     Phaser.Group.call(this, game, game.world, 'StraightBoss1', false, true, Phaser.Physics.ARCADE);
+    this.id = "StraightBoss1";
 
     this.bulletSpeed = 300;
     this.shotDelay = 10;

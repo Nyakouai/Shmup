@@ -1,9 +1,10 @@
-{
-	"enemy" : {
+{"enemies" : [
+	{
 		"id" : "Enemy1",
 		"sprite" : "enemy1", //Identifiant et non le chemin du sprite, 
 				     //penser à précharger tous les sprites au préalable
 		"hitbox" : ["40","40"],
+		"animationFrames" : "4", //Nombre de frames d'animation du sprite 
 		"health" : "5",
 		"score" : "100",
 		"powerup" : "false",
@@ -15,18 +16,16 @@
 				"time" : ["0"], 
 				"weapon" : "0", 
 				"type" : "catmull", 
-				"points-x" : ["119","99.5","-76.5"], 
-				"points-y" : ["-40","455","535"] 
+				"pointsX" : ["119","99.5","-76.5"], 
+				"pointsY" : ["-40","455","535"] 
 			}
 		]
-	}
-}
-
-{
-	"enemy" : {
+	},
+	{
 		"id" : "Enemy2",
 		"sprite" : "enemy1",
 		"hitbox" : ["40","40"],
+		"animationFrames" : "4",
 		"health" : "5",
 		"score" : "100",
 		"powerup" : "false",
@@ -58,15 +57,13 @@
 				"speed" : "this"
 			}
 		]
-	}
-}
-
-{
-	"enemy" : {
+	},
+	{
 		"id" : "Boss1",
 		"sprite" : "enemy2",
 		"hitbox" : ["26","40"],
 		"scale" : ["2","2"],
+		"animationFrames" : "2",
 		"health" : "300",
 		"score" : "2000",
 		"powerup" : "false",
@@ -141,5 +138,5 @@
 				"setTime" : "100"
 			}
 		]
-	}
+	}]
 }
