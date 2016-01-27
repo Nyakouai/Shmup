@@ -164,14 +164,18 @@ Player.prototype.bombCooldown = function() {
     }
 };
 
-Player.prototype.save = function() {
+Player.prototype.saveData = function() {
 	store.set('x', this.body.x);
 	store.set('y', this.body.y);
+	store.set('life', this.life);
 };
 
-Player.prototype.load = function() {
-	this.body.x = store.get('x');
-	this.body.y = store.get('y');
+Player.prototype.loadData = function() {
+	var x = store.get('x');
+	var y = store.get('y');
+	var life = store.get('life');
+
+	this.reset(x, y, life);
 };
 
 //Player.prototype.destructor = function() {

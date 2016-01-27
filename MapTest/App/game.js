@@ -43,8 +43,30 @@ BasicGame.Game.prototype = {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 
 		var pause = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-		pause.onDown.add(this.pauseGame, this);
-		this.game.input.onDown.add(this.pauseMenu, this);
+		pause.onDown.add(function () {
+			game.paused = true;
+			level.autoScroll(0, 0);
+
+			var grayfilter = this.game.add.filter('Gray');
+
+			this.world.filters = [grayfilter];
+			
+			this.loadingText = this.add.text(this.game.width / 2, 100, "Press P or tap/click game to resume", { font: "20px monospace", fill: "#fff" });
+	    	this.loadingText.anchor.setTo(0.5, 0.5);
+
+	    	this.saveButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 - 50, 'button');
+	    	this.saveButton.anchor.setTo(0.5, 0.5);
+	    	this.saveText = this.add.text(this.game.width / 2, this.game.height / 2 - 50, "Sauver", { font: "25px monospace", fill: "#000" });
+	    	this.saveText.anchor.setTo(0.5, 0.5);
+
+	    	this.loadButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 50, 'button');
+	    	this.loadButton.anchor.setTo(0.5, 0.5);
+	    	this.loadText = this.add.text(this.game.width / 2, this.game.height / 2 + 50, "Charger", { font: "25px monospace", fill: "#000" });
+	    	this.loadText.anchor.setTo(0.5, 0.5);
+    	});
+
+		var unpause = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
+		unpause.onDown.add(this.unpauseGame, this);
 		
 		level = new Level(this.game);
 
@@ -79,6 +101,7 @@ BasicGame.Game.prototype = {
 	 * @public
 	 */
 	update: function () {
+
 		this.physics.arcade.overlap(enemies, player.weapons, this.bulletcollisionHandler, null, this)
 		this.physics.arcade.overlap(player, enemies, this.playerCollisionHandler, null, this)
 		
@@ -188,30 +211,20 @@ BasicGame.Game.prototype = {
   		*/
 	},
 
-	pauseGame: function () {
-		if(!this.game.paused)
+	unpauseGame: function() {
+		if(this.game.paused)
 		{
-			this.game.paused = true;
-			level.autoScroll(0, 0);
-
-			var grayfilter = this.game.add.filter('Gray');
-
-			this.world.filters = [grayfilter];
-			
-			this.loadingText = this.add.text(this.game.width / 2, 100, "Press P or tap/click game to resume", { font: "20px monospace", fill: "#fff" });
-	    	this.loadingText.anchor.setTo(0.5, 0.5);
-
-	    	this.saveButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 - 50, 'button');
-	    	this.saveButton.anchor.setTo(0.5, 0.5);
-	    	this.saveText = this.add.text(this.game.width / 2, this.game.height / 2 - 50, "Sauver", { font: "25px monospace", fill: "#000" });
-	    	this.saveText.anchor.setTo(0.5, 0.5);
-
-	    	this.loadButton = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 50, 'button');
-	    	this.loadButton.anchor.setTo(0.5, 0.5);
-	    	this.loadText = this.add.text(this.game.width / 2, this.game.height / 2 + 50, "Charger", { font: "25px monospace", fill: "#000" });
-	    	this.loadText.anchor.setTo(0.5, 0.5);	    	
-    	}
-    	else
+			if(event.x > this.saveButton.x && event.x < this.saveButton.x+this.saveButton.width 
+            	&& event.y > this.saveButton.y && event.y < this.saveButton.x+this.saveButton.height ){	
+                console.log("save");
+           	 	this.saveData();
+            }
+            else if(event.x > this.loadButton.x && event.x < this.loadButton.x+this.loadButton.width 
+            	&& event.y > this.loadButton.y && event.y < this.loadButton.x+this.loadButton.height ){
+                this.loadData();
+            }
+		}
+		else
     	{
 			this.loadingText.destroy();
 			this.saveButton.destroy();
@@ -223,17 +236,6 @@ BasicGame.Game.prototype = {
 			level.autoScroll(0, 50);
 			this.game.paused = false;
 		}
-	},
-
-	pauseMenu: function() {
-	    if(this.game.input.x > (this.saveButton.x - (this.saveButton.width/2)) && this.game.input.x < (this.saveButton.x + (this.saveButton.width/2)) 
-	    && this.game.input.y > (this.saveButton.y - (this.saveButton.height/2)) && this.game.input.y < (this.saveButton.y + (this.saveButton.height/2)) ){	
-	   	 	this.saveData();
-	    }
-	    else if(this.game.input.x > (this.loadButton.x - (this.loadButton.width/2)) && this.game.input.x < (this.loadButton.x + (this.loadButton.width/2)) 
-	    && this.game.input.y > (this.loadButton.y - (this.loadButton.height/2)) && this.game.input.y < (this.loadButton.y + (this.loadButton.height/2)) ){	
-        	this.loadData();
-    	}
 	},
 
 	saveData: function() {
