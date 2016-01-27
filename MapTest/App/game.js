@@ -59,15 +59,52 @@ BasicGame.Game.prototype = {
 	  		jsonObj = JSON.parse(response);
  		});
 
- 		console.log(jsonObj);
+ 		// Generation
+ 		var tileNumber = Math.floor(Math.random() * (18+1));
+ 		map.putTile(tileNumber, 0, 0, layer);
+
+ 		var prevTileNumber = tileNumber;
+ 		var line = [tileNumber];
+
+ 		for(var i=1; i<width; i++)
+		{
+			jsonObj[prevTileNumber]['E']
 
 
-		for(var j=0; j<height; j++)
+
+
+
+
+			
+
+				tileNumber = Math.floor(Math.random() * (18+1));
+				console.log(tileNumber);
+
+				if(tileNumber in )
+
+
+
+			map.putTile(tileNumber, i, 0, layer);
+			prevTileNumber = tileNumber;
+			line.push(tileNumber);
+		}
+
+
+		/*for(var j=1; j<height; j++)
 			for(var i=0; i<width; i++)
-				map.putTile(8, i, j, layer);
+			{
+				do{
+					tileNumber = Math.floor(Math.random() * (18+1));
 
-			map.putTile(6, 1, 2, layer);
+					if(tileNumber in jsonObj[prevTileNumber]['E'] && tileNumber in jsonObj[line[i]]['S'])
+						isOk = true;
+				
+				} while(isOk);
 
+				map.putTile(tileNumber, i, 0, layer);
+				prevTileNumber = tileNumber;
+				line[i] = tileNumber;
+			}*/
   	},
 
 	/**
