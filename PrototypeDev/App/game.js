@@ -31,8 +31,6 @@ BasicGame.Game = function (game) {
 	var playerLifeText;
 	var bombText;
 
-	var paused;
-
     var jsonObj;
 };
 
@@ -239,14 +237,17 @@ BasicGame.Game.prototype = {
 	},
 
 	pauseMenu: function() {
-	    if(this.game.input.x > (this.saveButton.x - (this.saveButton.width/2)) && this.game.input.x < (this.saveButton.x + (this.saveButton.width/2)) 
-	    && this.game.input.y > (this.saveButton.y - (this.saveButton.height/2)) && this.game.input.y < (this.saveButton.y + (this.saveButton.height/2)) ){	
-	   	 	this.saveData();
-	    }
-	    else if(this.game.input.x > (this.loadButton.x - (this.loadButton.width/2)) && this.game.input.x < (this.loadButton.x + (this.loadButton.width/2)) 
-	    && this.game.input.y > (this.loadButton.y - (this.loadButton.height/2)) && this.game.input.y < (this.loadButton.y + (this.loadButton.height/2)) ){	
-        	this.loadData();
-    	}
+		if(this.game.paused)
+		{
+			if(this.game.input.x > (this.saveButton.x - (this.saveButton.width/2)) && this.game.input.x < (this.saveButton.x + (this.saveButton.width/2)) 
+			&& this.game.input.y > (this.saveButton.y - (this.saveButton.height/2)) && this.game.input.y < (this.saveButton.y + (this.saveButton.height/2)) ){	
+				this.saveData();
+			}
+			else if(this.game.input.x > (this.loadButton.x - (this.loadButton.width/2)) && this.game.input.x < (this.loadButton.x + (this.loadButton.width/2)) 
+			&& this.game.input.y > (this.loadButton.y - (this.loadButton.height/2)) && this.game.input.y < (this.loadButton.y + (this.loadButton.height/2)) ){	
+				this.loadData();
+			}
+		}
 	},
 
 	saveData: function() {
