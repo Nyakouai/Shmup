@@ -173,9 +173,9 @@ BasicGame.Game.prototype = {
 	 */
 	render: function () {
 
-		this.game.debug.cameraInfo(this.camera, 32, 32);
-		this.game.debug.text("Current time: " + this.game.time.time, 30, 120);
-		this.game.debug.text("Progress: " + level.progress, 30, 150);
+		//this.game.debug.cameraInfo(this.camera, 32, 32);
+		//this.game.debug.text("Current time: " + this.game.time.time, 30, 120);
+		//this.game.debug.text("Progress: " + level.progress, 30, 150);
 		
 		//Debug Hitbox
 		
@@ -257,6 +257,13 @@ BasicGame.Game.prototype = {
     	}
 
 	    player.saveData();
+	    level.saveData();
+
+		for(var i=0; i<enemies.length; i++){
+			enemies[i].forEach(function (enemy){
+				enemy.saveData();
+			},this);
+		}
 	},
 
 	loadData: function() {
@@ -266,6 +273,13 @@ BasicGame.Game.prototype = {
     	}
 
 	    player.loadData();
+	    level.loadData();
+
+		for(var i=0; i<enemies.length; i++){
+			enemies[i].forEach(function (enemy){
+				enemy.loadData();
+			},this);
+		}
 	},
 
 	quitGame: function (pointer) {

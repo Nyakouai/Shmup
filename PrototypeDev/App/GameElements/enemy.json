@@ -63,7 +63,7 @@
 	{
 		"id" : "Boss1",
 		"sprite" : "enemy2",
-		"hitbox" : [26,40],
+		"hitbox" : [40,40],
 		"scale" : [2,2],
 		"animationFrames" : [0,1],
 		"health" : 300,

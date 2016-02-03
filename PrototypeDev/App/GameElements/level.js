@@ -6,7 +6,7 @@ Level = function(game) {
 
 	this.progress = 0;
 	this.enemies = [];
-	this.test = true;
+	//this.test = true;
 
 	game.add.existing(this);
 }
@@ -131,4 +131,12 @@ Level.prototype.update = function() {
 	}
 
 	this.progress++;
+};
+
+Level.prototype.saveData = function() {
+	store.set('level.progress', this.progress);
+};
+
+Level.prototype.loadData = function() {
+	this.progress = store.get('level.progress');
 };
