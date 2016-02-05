@@ -1,4 +1,5 @@
 /*
+/*
  * ENSICAEN
  * 6 Boulevard Marechal Juin 
  * F-14050 Caen Cedex 
@@ -19,10 +20,6 @@
  * @param {Game} game accessor of the Phaser's game object
  */
 BasicGame.MainMenu = function (game) {
-
-  //this.music = null;
-  this.playButton = null;
-
 };
 
 BasicGame.MainMenu.prototype = {
@@ -48,7 +45,7 @@ BasicGame.MainMenu.prototype = {
   },
 
   startGame: function (pointer) {
-    this.state.start('Game');
+    this.state.start('Game', true, false, 1);
   }
 
 };

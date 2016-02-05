@@ -37,6 +37,14 @@ BasicGame.Game = function (game) {
 BasicGame.Game.prototype = {
 
 	/**
+	 * Called before everything
+	 * @public
+	 */
+	init: function (levelId) {
+		this.game.levelId = levelId;
+	},
+
+	/**
 	 * Constructor of the game
 	 * @public
 	 */
@@ -79,6 +87,9 @@ BasicGame.Game.prototype = {
 		score=0;
 		scoreText = this.add.text(10, 600-40, 'Score: 0', 
 			{ fontSize: '32px', fill: '#000' });
+		levelIdText = this.add.text(10, 600-80, 'Level: 1', 
+			{ fontSize: '32px', fill: '#000' });
+		levelIdText.text = 'Level: ' + this.game.levelId;
 		playerLifeText = this.add.text(800-100, 600-80, 'Life: 3', 
 			{ fontSize: '32px', fill: '#000' });
 		bombText = this.add.text(800-150, 600-40, 'Bombs: 3', 

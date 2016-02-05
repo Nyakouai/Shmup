@@ -142,6 +142,9 @@ Enemy.prototype.update = function(){
 Enemy.prototype.kill = function(){
 	Phaser.Sprite.prototype.kill.call(this);
     this.init(this.speed);
+
+    if(this.boss)
+        this.game.state.start('VictoryMenu', true, false, this.game.levelId);
 }
 
 Enemy.prototype.saveData = function() {
