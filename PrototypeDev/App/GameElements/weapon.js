@@ -14,7 +14,7 @@ Weapon.BulletLvl1 = function (game) {
 
     for (var i = 0; i < 64; i++)
     {
-        this.add(new Bullet(game, 'bullet8'), true);
+        this.add(new Bullet(game, 'bullet8', this.id, i), true);
     }
 
     this.setAll('power', this.power);
@@ -50,7 +50,7 @@ Weapon.BulletLvl2 = function (game) {
 
     for (var i = 0; i < 96; i++)
     {
-        this.add(new Bullet(game, 'bullet8'), true);
+        this.add(new Bullet(game, 'bullet8', this.id, i), true);
     }
 
     this.setAll('power', this.power);
@@ -88,7 +88,7 @@ Weapon.BulletLvl3 = function (game) {
 
     for (var i = 0; i < 96; i++)
     {
-        this.add(new Bullet(game, 'bullet4'), true);
+        this.add(new Bullet(game, 'bullet4', this.id, i), true);
     }
 
     this.setAll('power', this.power);
@@ -126,7 +126,7 @@ Weapon.Fireball = function (game) {
 
     for (var i = 0; i < 20; i++)
     {
-        this.add(new Bullet(game, 'fireball'), true);
+        this.add(new Bullet(game, 'fireball', this.id, i), true);
     }
 
     this.setAll('tracking', true);
@@ -175,7 +175,7 @@ Weapon.BulletEnemy1 = function (game) {
 
     for (var i = 0; i < 64; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -205,7 +205,7 @@ Weapon.BulletEnemy2 = function (game) {
 
     for (var i = 0; i < 64; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -244,7 +244,7 @@ Weapon.BulletEnemyTowerBoss = function (game) {
 
     for (var i = 0; i < 64; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -279,7 +279,7 @@ Weapon.PatternBoss1 = function (game) {
 
     for (var i = 0; i < 64; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -314,7 +314,7 @@ Weapon.SpreadBoss1 = function (game) {
 
     for (var i = 0; i < 90; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -355,7 +355,7 @@ Weapon.HomingBoss1 = function (game) {
 
     for (var i = 0; i < 90; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;
@@ -397,7 +397,7 @@ Weapon.StraightBoss1 = function (game) {
 
     for (var i = 0; i < 200; i++)
     {
-        this.add(new Bullet(game, 'bullet7'), true);
+        this.add(new Bullet(game, 'bullet7', this.id, i), true);
     }
 
     return this;

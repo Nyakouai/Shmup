@@ -167,17 +167,43 @@ Player.prototype.bombCooldown = function() {
 };
 
 Player.prototype.saveData = function() {
-	store.set('x', this.body.x);
-	store.set('y', this.body.y);
-	store.set('life', this.life);
+	store.set('player.x', this.x);
+	store.set('player.y', this.y);
+	store.set('player.life', this.life);
+	store.set('player.countBombs', this.countBombs);
+	store.set('player.weaponLevel', this.weaponLevel);
+	store.set('player.appearing', this.appearing);
+	store.set('player.cooldown', this.cooldown);
+	store.set('player.timerAppearing', this.timerAppearing);
+	store.set('player.timerCooldown', this.timerCooldown);
+
+	for(var i=0; i<this.weapons.length; i++){
+		this.weapons[i].forEach(function (bullet){
+			bullet.saveData();
+		},this);
+	}
 };
 
 Player.prototype.loadData = function() {
-	var x = store.get('x');
-	var y = store.get('y');
-	var life = store.get('life');
+	var x = store.get('player.x');
+	var y = store.get('player.y');
+	this.reset(x, y);
 
-	this.reset(x, y, life);
+	this.life = store.get('player.life');
+	playerLifeText.text = 'Life: ' + this.life;
+	this.countBombs = store.get('player.countBombs');
+	bombText.text = 'Bombs: ' + this.countBombs;
+	this.weaponLevel = store.get('player.weaponLevel');
+	this.appearing = store.get('player.appearing');
+	this.cooldown = store.get('player.cooldown');
+	this.timerAppearing = store.get('player.timerAppearing');
+	this.timerCooldown = store.get('player.timerCooldown');
+
+	for(var i=0; i<this.weapons.length; i++){
+		this.weapons[i].forEach(function (bullet){
+			bullet.loadData();
+		},this);
+	}
 };
 
 //Player.prototype.destructor = function() {

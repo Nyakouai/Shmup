@@ -1,6 +1,7 @@
-Enemy = function(game, obj) {
+Enemy = function(game, obj, i) {
 	this.game = game;
     //this.obj = obj;
+    this.id = obj.id + '_' + i;
 
 	Phaser.Sprite.call(this, game, 0, 0, obj.sprite)
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
@@ -50,8 +51,8 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.appear = function(x, y, width, height, speed, health){
 	this.exists = true;
+    this.body.setSize(width, height, 0, 0);
 	this.reset(x, y, health);
-	this.body.setSize(width, height, 0, 0);
 
     this.init(speed);
 
@@ -143,6 +144,65 @@ Enemy.prototype.kill = function(){
     this.init(this.speed);
 }
 
+Enemy.prototype.saveData = function() {
+    store.set(this.id+'.exists', this.exists);
+    if(this.exists){
+        store.set(this.id+'.x', this.x);
+        store.set(this.id+'.y', this.y);
+        store.set(this.id+'.health', this.health);
+        store.set(this.id+'.currentWeapon', this.currentWeapon);
+        store.set(this.id+'.nextShot', this.nextShot);
+        store.set(this.id+'.speed', this.speed);
+        store.set(this.id+'.timeOnScreen', this.timeOnScreen);
+        store.set(this.id+'.timePattern', this.timePattern);
+        store.set(this.id+'.tint', this.tint);
+        
+        for(var i=0; i<this.weapons.length; i++){
+            this.weapons[i].forEach(function (bullet){
+                bullet.saveData();
+            },this);
+        }
+    }
+/*
+    for(var i=0; i<this.weapons.length; i++){
+        this.weapons[i].forEach(function (bullet){
+            bullet.saveData();
+        },this);
+    }*/
+}
+
+Enemy.prototype.loadData = function() {
+    var exist = store.get(this.id+'.exists');
+    if(exist){
+        var x = store.get(this.id+'.x');
+        var y = store.get(this.id+'.y');
+        var health = store.get(this.id+'.health');
+
+        this.reset(x, y, health);
+        this.currentWeapon = store.get(this.id+'.currentWeapon');
+        this.nextShot = store.get(this.id+'.nextShot');
+        this.speed = store.get(this.id+'.speed');
+        this.timeOnScreen = store.get(this.id+'.timeOnScreen');
+        this.timePattern = store.get(this.id+'.timePattern');
+        this.tint = store.get(this.id+'.tint');
+
+        for(var i=0; i<this.weapons.length; i++){
+            this.weapons[i].forEach(function (bullet){
+                bullet.loadData();
+            },this);
+        }
+    }
+    else{
+        this.exists = exist ;
+    }
+/*
+    for(var i=0; i<this.weapons.length; i++){
+        this.weapons[i].forEach(function (bullet){
+            bullet.loadData();
+        },this);
+    }*/
+}
+
 
 
 
@@ -153,7 +213,7 @@ EnemyGroup = function(game, obj){
     Phaser.Group.call(this, game, game.world, 'EnemyGroup', false, true, Phaser.Physics.ARCADE);
 
     for (var i = 0; i < 20; i++){
-        this.add(new Enemy(game, obj), true);
+        this.add(new Enemy(game, obj, i), true);
     }
 
     return this;

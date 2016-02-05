@@ -1,5 +1,6 @@
-var Bullet = function (game, key) {
+var Bullet = function (game, key, id, i) {
     Phaser.Sprite.call(this, game, 0, 0, key);
+    this.id = id + "_" + i;
 
     this.game = game;
 
@@ -53,3 +54,44 @@ Bullet.prototype.update = function () {
         this.scale.y += this.scaleSpeed;
     }
 };
+
+Bullet.prototype.saveData = function() {
+    store.set(this.id+'.exists', this.exists);
+    //console.log(this.id + " - " + this.exists);
+    if(this.exists){
+        //console.log(this.id);
+        store.set(this.id+'.x', this.x);
+        store.set(this.id+'.y', this.y);
+        store.set(this.id+'.rotation', this.rotation);
+        store.set(this.id+'.angle', this.angle);
+        store.set(this.id+'.velocity.x', this.body.velocity.x);
+        store.set(this.id+'.velocity.y', this.body.velocity.y);
+        store.set(this.id+'.scale.x', this.scale.x);
+        store.set(this.id+'.scale.y', this.scale.y);
+        store.set(this.id+'.gravity.x', this.body.gravity.x);
+        store.set(this.id+'.gravity.y', this.body.gravity.y);
+    }
+}
+
+Bullet.prototype.loadData = function() {
+    var exist = store.get(this.id+'.exists');
+    //console.log(this.id + " - " + exist);
+    if(exist){
+        //consle.log(this.id);
+        var x = store.get(this.id+'.x');
+        var y = store.get(this.id+'.y');
+        this.reset(x, y);
+
+        this.rotation = store.get(this.id+'.rotation');
+        this.angle = store.get(this.id+'.angle');
+        this.body.velocity.x = store.get(this.id+'.velocity.x');
+        this.body.velocity.y = store.get(this.id+'.velocity.y');
+        this.scale.x = store.get(this.id+'.scale.x');
+        this.scale.y = store.get(this.id+'.scale.y');
+        this.body.gravity.x = store.get(this.id+'.gravity.x');
+        this.body.gravity.y = store.get(this.id+'.gravity.y');
+    }
+    else{
+        this.exists = exist ;
+    }
+}
