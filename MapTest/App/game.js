@@ -59,7 +59,11 @@ BasicGame.Game.prototype = {
 	  		jsonObj = JSON.parse(response);
  		});
 
- 		// Generation
+		generateNextTile(0, 0);
+ 		
+  	},
+
+  	generateNextTile: function(i, j) {
  		var tileNumber = Math.floor(Math.random() * (18+1));
  		map.putTile(tileNumber, 0, 0, layer);
 
@@ -68,43 +72,16 @@ BasicGame.Game.prototype = {
 
  		for(var i=1; i<width; i++)
 		{
-			jsonObj[prevTileNumber]['E']
-
-
-
-
-
-
+			var constraint = jsonObj[prevTileNumber]['E'];
+			tileNumber = constraint[Math.floor(Math.random() * (constraint.length))];
 			
-
-				tileNumber = Math.floor(Math.random() * (18+1));
-				console.log(tileNumber);
-
-				if(tileNumber in )
-
-
-
 			map.putTile(tileNumber, i, 0, layer);
 			prevTileNumber = tileNumber;
 			line.push(tileNumber);
 		}
 
 
-		/*for(var j=1; j<height; j++)
-			for(var i=0; i<width; i++)
-			{
-				do{
-					tileNumber = Math.floor(Math.random() * (18+1));
 
-					if(tileNumber in jsonObj[prevTileNumber]['E'] && tileNumber in jsonObj[line[i]]['S'])
-						isOk = true;
-				
-				} while(isOk);
-
-				map.putTile(tileNumber, i, 0, layer);
-				prevTileNumber = tileNumber;
-				line[i] = tileNumber;
-			}*/
   	},
 
 	/**
@@ -121,7 +98,7 @@ BasicGame.Game.prototype = {
 	 */
 	render: function () {
 
-		this.game.debug.cameraInfo(this.camera, 32, 32);
+		//this.game.debug.cameraInfo(this.camera, 32, 32);
 	},
 
 	quitGame: function (pointer) {

@@ -114,6 +114,8 @@ Player.prototype.timerHandler = function(){
 
 Player.prototype.takeDamage = function() {
 	this.life--;
+	if(this.life == 0)
+		this.game.state.start('MainMenu');
 	this.explode();
 	this.game.time.events.add(500, function (){
 		this.reset(this.game.world.width/2, 620);

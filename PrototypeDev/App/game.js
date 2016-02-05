@@ -38,7 +38,7 @@ BasicGame.Game.prototype = {
 
 	/**
 	 * Constructor of the game
-	 * x@public
+	 * @public
 	 */
 	create: function () {
   		this.game.renderer.renderSession.roundPixels = true;
