@@ -33,6 +33,8 @@ Player = function(game) {
 	this.weapons.push(new Weapon.BulletLvl3(game));
 	this.weapons.push(new Weapon.Fireball(game));
 
+	game.input.onTap.add(this.onTap, this);
+
 	game.add.existing(this);
 };
 
@@ -86,6 +88,16 @@ Player.prototype.update = function() {
 	}
 };
 
+Player.prototype.onTap = function(pointer, doubleTap) {
+    if (doubleTap){
+    	var diffx = Math.abs(this.x - pointer.x);
+    	var diffy = Math.abs(this.y - pointer.y);
+    	if(diffx <= this.body.width && diffy <= this.body.height){
+        	this.launchBomb();
+    	}
+    }
+};
+
 Player.prototype.timerHandler = function(){
 	if(this.appearing){
 		if(this.timerAppearing < 50){
@@ -122,6 +134,7 @@ Player.prototype.takeDamage = function() {
 		this.appearing = true;
 		this.exists = true;
 		this.weaponLevel = 0;
+		this.countBombs = 3;
 	}, this);
 	//this.game.time.create(1000, this.respawn, this);
 };
@@ -152,7 +165,6 @@ Player.prototype.launchBomb = function() {
     	this.countBombs--;
     	fireball.fire(this);
     	this.cooldown = true;
-    	bombText.text = 'Bombs: ' + this.countBombs;
 	}
 
 };

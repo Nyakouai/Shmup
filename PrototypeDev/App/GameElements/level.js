@@ -1,4 +1,6 @@
-Level = function(game) {
+var Level = {}
+
+Level.Level1 = function(game) {
 	this.game = game;
 
 	Phaser.TileSprite.call(this, game, 0, 0, 800, 5688, 'background');
@@ -11,10 +13,10 @@ Level = function(game) {
 	game.add.existing(this);
 }
 
-Level.prototype = Object.create(Phaser.TileSprite.prototype);
-Level.prototype.constructor = Level;
+Level.Level1.prototype = Object.create(Phaser.TileSprite.prototype);
+Level.Level1.prototype.constructor = Level.Level1;
 
-Level.prototype.update = function() {
+Level.Level1.prototype.update = function() {
 	/****** Vague 1 ******
 	 *Enemy1:
 	 	-number		: 10
@@ -133,10 +135,62 @@ Level.prototype.update = function() {
 	this.progress++;
 };
 
-Level.prototype.saveData = function() {
+Level.Level1.prototype.saveData = function() {
+	store.set('level.progress', this.progress);
+	store.set('level.tilePosition', this.tilePosition);
+};
+
+Level.Level1.prototype.loadData = function() {
+	this.progress = store.get('level.progress');
+	this.tilePosition = store.get('level.tilePosition');
+};
+
+
+
+Level.Level2 = function(game) {
+	this.game = game;
+
+	Phaser.TileSprite.call(this, game, 0, 0, 800, 5688, 'background');
+	this.autoScroll(0, 50);
+
+	this.progress = 0;
+	this.enemies = [];
+	//this.test = true;
+
+	game.add.existing(this);
+}
+
+Level.Level2.prototype = Object.create(Phaser.TileSprite.prototype);
+Level.Level2.prototype.constructor = Level.Level1;
+
+Level.Level2.prototype.update = function() {
+	/****** Vague 1 ******
+	 *Enemy1:
+	 	-number		: 10
+	 	-spawn(x,y)	: (100, -30)
+	 	-speed		: 80
+	 *EnemyPowerup:
+	 	-number		: 1
+	 	-spawn(x,y) : (540, -30)
+	 	-speed		: 100
+	*********************/
+	if(this.progress == 200){
+		this.game.time.events.repeat(500, 10, this.enemies[0].appear, 
+			this.enemies[0], 100, -30, 2);
+	}
+	if(this.progress == 500){
+		this.enemies[1].appear(340, -30, 100);
+		//this.game.time.events.repeat(3000, 100, this.enemies[1].appear,
+		//	this.enemies[1], "random", -30, 80);
+	}
+
+	this.progress++;
+};
+
+Level.Level2.prototype.saveData = function() {
 	store.set('level.progress', this.progress);
 };
 
-Level.prototype.loadData = function() {
+Level.Level2.prototype.loadData = function() {
 	this.progress = store.get('level.progress');
 };

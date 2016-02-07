@@ -45,7 +45,7 @@ BasicGame.MainMenu.prototype = {
   },
 
   startGame: function (pointer) {
-    this.state.start('Game', true, false, 1);
+    this.state.start('Game', true, false, 1, false);
   }
 
 };

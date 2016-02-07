@@ -40,8 +40,9 @@ BasicGame.Game.prototype = {
 	 * Called before everything
 	 * @public
 	 */
-	init: function (levelId) {
+	init: function (levelId, loaded) {
 		this.game.levelId = levelId;
+		this.loaded = loaded;
 	},
 
 	/**
@@ -54,9 +55,10 @@ BasicGame.Game.prototype = {
 
 		var pause = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
 		pause.onDown.add(this.pauseGame, this);
+		this.game.input.onDown.add(this.pauseInput, this);
 		this.game.input.onDown.add(this.pauseMenu, this);
 		
-		level = new Level(this.game);
+		level = new Level["Level"+this.game.levelId](this.game);
 
 		player = new Player(this.game);
 /*
@@ -70,7 +72,8 @@ BasicGame.Game.prototype = {
 		enemies.push(new Enemies.Boss1(this.game));
 		level.enemies = enemies;
     */
-    	loadJSON(function(response) {
+    	var fileJSON = 'App/GameElements/enemy'+this.game.levelId+'.json';
+    	loadJSON(fileJSON, function(response) {
 	  		jsonObj = JSON.parse(response);
  		});
 		enemies = [];
@@ -94,6 +97,15 @@ BasicGame.Game.prototype = {
 			{ fontSize: '32px', fill: '#000' });
 		bombText = this.add.text(800-150, 600-40, 'Bombs: 3', 
 			{ fontSize: '32px', fill: '#000' });
+
+		this.pauseButton = this.game.add.sprite(25, 25, 'pause');
+	    this.pauseButton.anchor.setTo(0.5, 0.5);
+	    this.pauseButton.scale.setTo(0.18, 0.18);
+
+		if(this.loaded){
+			this.loadData();
+			this.pauseGame();
+		}
   	},
 
 	/**
@@ -112,6 +124,11 @@ BasicGame.Game.prototype = {
 				this.physics.arcade.overlap(player, enemy.weapons, this.bulletEnemyCollisionHandler, null, this)
 			},this);
 		}
+
+		playerLifeText.text = 'Life: ' + player.life;
+		scoreText.text = 'Score: ' + score;
+    	bombText.text = 'Bombs: ' + player.countBombs;
+    	levelIdText.text = 'Level: ' + this.game.levelId;
 	},
 
 	/**
@@ -141,8 +158,6 @@ BasicGame.Game.prototype = {
 			enemy.kill();
 			score += enemy.score;
 		}
-		
-		scoreText.text = 'Score: ' + score;
 	},
 	
 
@@ -150,7 +165,6 @@ BasicGame.Game.prototype = {
 		if(!player.cooldown && !player.appearing){
 			player.takeDamage();
 			//ennemy.kill();
-			playerLifeText.text = 'Life: ' + player.life;
 		}
 	},
 
@@ -158,7 +172,6 @@ BasicGame.Game.prototype = {
 		if(!player.cooldown && !player.appearing){
 			player.takeDamage();
 			bullet.kill();
-			playerLifeText.text = 'Life: ' + player.life;
 		}
 
 	},
@@ -210,6 +223,9 @@ BasicGame.Game.prototype = {
   		*/
 	},
 
+	pauseInput: function(){
+	},
+
 	pauseGame: function () {
 		if(!this.game.paused)
 		{
@@ -256,7 +272,17 @@ BasicGame.Game.prototype = {
 			}
 			else if(this.game.input.x > (this.loadButton.x - (this.loadButton.width/2)) && this.game.input.x < (this.loadButton.x + (this.loadButton.width/2)) 
 			&& this.game.input.y > (this.loadButton.y - (this.loadButton.height/2)) && this.game.input.y < (this.loadButton.y + (this.loadButton.height/2)) ){	
-				this.loadData();
+				this.preLoad();
+			}
+			else{
+				this.pauseGame();
+			}
+		}
+		else
+		{	
+			if(this.game.input.x > (this.pauseButton.x - (this.pauseButton.width/2)) && this.game.input.x < (this.pauseButton.x + (this.pauseButton.width/2)) 
+				&& this.game.input.y > (this.pauseButton.y - (this.pauseButton.height/2)) && this.game.input.y < (this.pauseButton.y + (this.pauseButton.height/2)) ){	
+					this.pauseGame();
 			}
 		}
 	},
@@ -267,8 +293,10 @@ BasicGame.Game.prototype = {
     		return;
     	}
 
-	    player.saveData();
+	    store.set('levelId', this.game.levelId);
 	    level.saveData();
+
+	    player.saveData();
 
 		for(var i=0; i<enemies.length; i++){
 			enemies[i].forEach(function (enemy){
@@ -277,20 +305,58 @@ BasicGame.Game.prototype = {
 		}
 	},
 
-	loadData: function() {
+	preLoad: function() {
 		if(!store.enabled) {
     		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
     		return;
     	}
 
-	    player.loadData();
+    	this.game.levelId = store.get('levelId');
+
+    	this.pauseGame();
+
+		this.game.state.start('LoadMenu', true, false, this.game.levelId);
+	},
+
+	loadData: function() {
+		if(!store.enabled) {
+    		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
+    		return;
+    	}
+    	/*
+	    //level = new Level["Level"+this.game.levelId](this.game);
+	    //level.enemies = enemies;
+	    level.destroy();
+	    player.destroy();
+		for(var i=0; i<enemies.length; i++){
+			enemies[i].forEach(function (enemy){
+				enemy.destroy();
+			},this);
+		}   
+		
+		level = new Level["Level"+this.game.levelId](this.game);
+
+		player = new Player(this.game);
+    	loadJSON(function(response) {
+	  		jsonObj = JSON.parse(response);
+ 		});
+		enemies = [];
+		for(var i=0; i<jsonObj.enemies.length; i++){
+			enemies.push(new EnemyGroup(this.game, jsonObj.enemies[i]));
+		}
+		level.enemies = enemies;
+*/
 	    level.loadData();
+
+	    player.loadData();
 
 		for(var i=0; i<enemies.length; i++){
 			enemies[i].forEach(function (enemy){
 				enemy.loadData();
 			},this);
 		}
+
+		this.loaded = false;
 	},
 
 	quitGame: function (pointer) {

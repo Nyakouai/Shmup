@@ -31,6 +31,7 @@ BasicGame.Preloader.prototype = {
     this.load.image('menuBackground', dir+'mainMenuBackground.png');
     this.load.image('background', dir+'Background/niveau1.png');
     this.load.image('button', dir+'button.png');
+    this.load.image('pause', dir+'pause.png');
 
     // Player
     this.load.image('player', dir+'player.png');

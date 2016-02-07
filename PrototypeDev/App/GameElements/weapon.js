@@ -122,7 +122,7 @@ Weapon.Fireball = function (game) {
     this.nextFire = 0;
     this.bulletSpeed = 500;
     this.fireRate = 1600;
-    this.power = 4;
+    this.power = 1;
 
     for (var i = 0; i < 20; i++)
     {

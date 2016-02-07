@@ -27,6 +27,7 @@ window.onload = function() {
   game.state.add('MainMenu', BasicGame.MainMenu);
   game.state.add('GameOverMenu', BasicGame.GameOverMenu);
   game.state.add('VictoryMenu', BasicGame.VictoryMenu);
+  game.state.add('LoadMenu', BasicGame.LoadMenu);
   game.state.add('PauseMenu', BasicGame.PauseMenu);
   game.state.add('Game', BasicGame.Game);
 
