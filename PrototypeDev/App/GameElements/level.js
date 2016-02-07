@@ -42,11 +42,11 @@ Level.Level1.prototype.update = function() {
 	 	-number		: 10
 	 	-spawn(x,y)	: (rand, -30)
 	 	-speed		: 100
-	*********************
-	if(this.progress == 1500){
+	*********************/
+	if(this.progress == 200){
 		this.game.time.events.repeat(1000, 10, this.enemies[1].appear, 
 			this.enemies[1], "random", -30, 100);
-	}
+	}/*
 	if(this.progress == 2000){
 		this.enemies[3].appear(540, -30, 100);
 	}
@@ -123,14 +123,14 @@ Level.Level1.prototype.update = function() {
 	*for(var i = 0; i < this.enemies.length; i++)
 		this.enemies[i].forEach(function (enemy) {
         	enemy.updates();
-    	});*/
+    	});
 	if(this.progress == 200){
 		//this.game.time.events.repeat(500, 10, this.enemies[0].appear, 
 		//	this.enemies[0], 100, -30, 2);
 		//this.game.time.events.repeat(1000, 10, this.enemies[1].appear, 
 		//	this.enemies[1], "random", -30, 100);
 			this.enemies[2].appear(400, -60, 140);
-	}
+	}*/
 
 	this.progress++;
 };

@@ -32,6 +32,9 @@ Enemy = function(game, obj, i) {
     this.outOfBoundsKill = true;
     this.exists = false;
 
+    var hitbox = obj.hitbox
+    this.body.setSize(hitbox[0], hitbox[1], 0, 0);
+
     this.animations.add('move',obj.animationsFrames,4,true);
 
     for(var i=0; i<obj.weapons.length; i++){
@@ -49,9 +52,8 @@ Enemy = function(game, obj, i) {
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 Enemy.prototype.constructor = Enemy;
 
-Enemy.prototype.appear = function(x, y, width, height, speed, health){
+Enemy.prototype.appear = function(x, y, speed, health){
 	this.exists = true;
-    this.body.setSize(width, height, 0, 0);
 	this.reset(x, y, health);
 
     this.init(speed);
@@ -227,12 +229,10 @@ EnemyGroup.prototype.constructor = EnemyGroup;
 
 EnemyGroup.prototype.appear = function(x, y, speed){
     if(x=="random"){
-        x = this.game.rnd.integerInRange(20, 620);
+        x = this.game.rnd.integerInRange(20, 780);
     }
 
-    var hitbox = this.obj.hitbox
-
-    this.getFirstExists(false).appear(x,y,hitbox[0],hitbox[1],speed,this.obj.health);
+    this.getFirstExists(false).appear(x,y,speed,this.obj.health);
 }
 
 

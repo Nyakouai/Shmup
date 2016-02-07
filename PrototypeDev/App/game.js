@@ -61,17 +61,7 @@ BasicGame.Game.prototype = {
 		level = new Level["Level"+this.game.levelId](this.game);
 
 		player = new Player(this.game);
-/*
-		enemies = [];
-		enemies.push(new Enemies.Enemy1(this.game));
-		enemies.push(new Enemies.Enemy2(this.game));
-		enemies.push(new Enemies.Enemy3(this.game));
-		enemies.push(new Enemies.EnemyPowerup(this.game));
-		enemies.push(new Enemies.EnemyBomb(this.game));
-		enemies.push(new Enemies.EnemyTowerBoss(this.game));
-		enemies.push(new Enemies.Boss1(this.game));
-		level.enemies = enemies;
-    */
+
     	var fileJSON = 'App/GameElements/enemy'+this.game.levelId+'.json';
     	loadJSON(fileJSON, function(response) {
 	  		jsonObj = JSON.parse(response);
@@ -294,6 +284,7 @@ BasicGame.Game.prototype = {
     	}
 
 	    store.set('levelId', this.game.levelId);
+	    store.set('score', score);
 	    level.saveData();
 
 	    player.saveData();
@@ -323,29 +314,9 @@ BasicGame.Game.prototype = {
     		alert('Sauvegarde non supportée sur votre navigateur. Desactivez le mode privé ou changez de navigateur');
     		return;
     	}
-    	/*
-	    //level = new Level["Level"+this.game.levelId](this.game);
-	    //level.enemies = enemies;
-	    level.destroy();
-	    player.destroy();
-		for(var i=0; i<enemies.length; i++){
-			enemies[i].forEach(function (enemy){
-				enemy.destroy();
-			},this);
-		}   
-		
-		level = new Level["Level"+this.game.levelId](this.game);
+    	
+		score = store.get('score');
 
-		player = new Player(this.game);
-    	loadJSON(function(response) {
-	  		jsonObj = JSON.parse(response);
- 		});
-		enemies = [];
-		for(var i=0; i<jsonObj.enemies.length; i++){
-			enemies.push(new EnemyGroup(this.game, jsonObj.enemies[i]));
-		}
-		level.enemies = enemies;
-*/
 	    level.loadData();
 
 	    player.loadData();
