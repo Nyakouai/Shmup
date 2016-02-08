@@ -4,6 +4,7 @@
 		"sprite" : "enemy1",
 		"hitbox" : [40,40],
 		"scale" : [1,1],
+		"tint" : "0xFFFFFF",
 		"animationFrames" : [0,1,2,3],
 		"health" : 5,
 		"score" : 100,
@@ -17,8 +18,32 @@
 				"weapon" : 0, 
 				"type" : "catmull", 
 				"idCatmull" : 0,
-				"pointsX" : [119,99.5,-76.5], 
-				"pointsY" : [-40,455,535] 
+				"pointsX" : [300,200,-76.5], 
+				"pointsY" : [-30,200,300] 
+			}
+		]
+	},
+	{
+		"id" : "Enemy1Bis",
+		"sprite" : "enemy1",
+		"hitbox" : [40,40],
+		"scale" : [1,1],
+		"tint" : "0xFFFFFF",
+		"animationFrames" : [0,1,2,3],
+		"health" : 5,
+		"score" : 100,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : ["BulletEnemy1"],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : 0, 
+				"type" : "catmull", 
+				"idCatmull" : 0,
+				"pointsX" : [500,600,876.5], 
+				"pointsY" : [-30,200,300] 
 			}
 		]
 	},
@@ -27,6 +52,7 @@
 		"sprite" : "enemy1",
 		"hitbox" : [40,40],
 		"scale" : [1,1],
+		"tint" : "0xFFFFFF",
 		"animationFrames" : [0,1,2,3],
 		"health" : 5,
 		"score" : 100,
@@ -61,10 +87,134 @@
 		]
 	},
 	{
+		"id" : "Enemy3",
+		"sprite" : "enemy1",
+		"hitbox" : [40,40],
+		"scale" : [1,1],
+		"tint" : "0xFF0000",
+		"animationFrames" : [0,1,2,3],
+		"health" : 2,
+		"score" : 50,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : [],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : -1, 
+				"type" : "rotMoveToXY", 
+				"XY" : ["random",600],
+				"speed" : "this",
+				"delay" : 0
+			},
+			{ 
+				"time" : [1], 
+				"weapon" : -1, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : "this"
+			}
+		]
+	},
+	{
+		"id" : "EnemyPowerup",
+		"sprite" : "enemy3",
+		"hitbox" : [26,40],
+		"scale" : [1,1],
+		"tint" : "0xFFFFFF",
+		"animationFrames" : [0,1],
+		"health" : 5,
+		"score" : 50,
+		"powerup" : true,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : [],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",250],
+				"speed" : "this",
+				"delay" : 500
+			},
+			{ 
+				"time" : [500], 
+				"weapon" : -1, 
+				"type" : "velocity", 
+				"axis" : "x", 
+				"speed" : "this"
+			}
+		]
+	},
+	{
+		"id" : "EnemyPowerup",
+		"sprite" : "enemy3",
+		"hitbox" : [26,40],
+		"scale" : [1,1],
+		"tint" : "0x00FF00",
+		"animationFrames" : [0,1],
+		"health" : 5,
+		"score" : 50,
+		"powerup" : false,
+		"bomb" : true,
+		"boss" : false,
+		"weapons" : [],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : -1, 
+				"type" : "moveToXY", 
+				"XY" : ["this",250],
+				"speed" : "this",
+				"delay" : 500
+			},
+			{ 
+				"time" : [500], 
+				"weapon" : -1, 
+				"type" : "velocity", 
+				"axis" : "x", 
+				"speed" : "this"
+			}
+		]
+	},
+	{
+		"id" : "EnemyTowerBoss",
+		"sprite" : "building1",
+		"hitbox" : [26,40],
+		"scale" : [1,1],
+		"tint" : "0xFFFFFF",
+		"animationFrames" : [0],
+		"health" : 50,
+		"score" : 500,
+		"powerup" : false,
+		"bomb" : false,
+		"boss" : false,
+		"weapons" : ["BulletEnemyTowerBoss"],
+		"pattern" : [
+			{ 
+				"time" : [0], 
+				"weapon" : 0, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : "this"
+			},
+			{ 
+				"time" : [250], 
+				"weapon" : 0, 
+				"type" : "velocity", 
+				"axis" : "y", 
+				"speed" : 0
+			}
+		]
+	},
+	{
 		"id" : "Boss1",
 		"sprite" : "enemy2",
 		"hitbox" : [40,40],
 		"scale" : [2,2],
+		"tint" : "0xFFFFFF",
 		"animationFrames" : [0,1],
 		"health" : 250,
 		"score" : 2000,

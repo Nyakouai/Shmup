@@ -25,6 +25,7 @@ Enemy = function(game, obj, i) {
 
     this.anchor.set(0.5, 0.5);
     this.scale.setTo(obj.scale[0],obj.scale[1]);
+    this.tint = obj.tint;
 
     game.physics.arcade.enable(this);
 
@@ -96,6 +97,9 @@ Enemy.prototype.init = function(speed){
             var idCatmull = pattern.idCatmull;
             this.catmull[idCatmull] = new CatmullData(this.game, pattern.pointsX, pattern.pointsY);
         }
+        if(pattern.type == "rotMoveToXYPattern"){
+            rotMoveToXYPattern(this, pattern.XY, pattern.speed, pattern.delay);
+        }
     }
 }
 
@@ -126,6 +130,10 @@ Enemy.prototype.update = function(){
 
             if(pattern.type == "moveToXY"){
                 moveToXYPattern(this, pattern.XY, pattern.speed, pattern.delay);
+            }
+
+            if(pattern.type == "rotMoveToXY"){
+                rotMoveToXYPattern(this, pattern.XY, pattern.speed, pattern.delay);
             }
 
             if(pattern.type == "velocity"){
@@ -217,7 +225,7 @@ EnemyGroup = function(game, obj){
 
     Phaser.Group.call(this, game, game.world, 'EnemyGroup', false, true, Phaser.Physics.ARCADE);
 
-    for (var i = 0; i < 20; i++){
+    for (var i = 0; i < 10; i++){
         this.add(new Enemy(game, obj, i), true);
     }
 

@@ -27,6 +27,31 @@ function moveToXYPattern(enemy, xy, speed, delay){
 	enemy.game.physics.arcade.moveToXY(enemy, x, y, speed, delay);
 }
 
+function rotMoveToXYPattern(enemy, xy, speed, delay){
+	var x = xy[0];
+	var y = xy[1];
+
+	if(x == "this"){
+		x = enemy.x;
+	}
+	if(y == "this"){
+		y = enemy.y;
+	}
+
+	if(x == "random"){
+		x = enemy.game.rnd.integerInRange(20, enemy.game.width-20);
+	}
+	if(y == "random"){
+		y = enemy.game.rnd.integerInRange(20, enemy.game.height-20);
+	}
+
+	if(speed == "this"){
+		speed = enemy.speed;
+	}
+
+	enemy.rotation = enemy.game.physics.arcade.moveToXY(enemy, x, y, speed, delay) - Math.PI/2;
+}
+
 function velocityPattern(enemy, axis, speed){
 	if(speed == "this"){
 		speed = enemy.speed;

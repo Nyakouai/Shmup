@@ -25,7 +25,7 @@ Player = function(game) {
 
 	// Weapons
 	this.weapons = [];
-	this.weaponLevel = 1;
+	this.weaponLevel = 0;
 	this.countBombs = 3;
 
 	this.weapons.push(new Weapon.BulletLvl1(game));
