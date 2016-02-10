@@ -169,6 +169,7 @@ Enemy.prototype.saveData = function() {
         store.set(this.id+'.timeOnScreen', this.timeOnScreen);
         store.set(this.id+'.timePattern', this.timePattern);
         store.set(this.id+'.tint', this.tint);
+        store.set(this.id+'.catmull', this.catmull);
         
         for(var i=0; i<this.weapons.length; i++){
             this.weapons[i].forEach(function (bullet){
@@ -198,6 +199,7 @@ Enemy.prototype.loadData = function() {
         this.timeOnScreen = store.get(this.id+'.timeOnScreen');
         this.timePattern = store.get(this.id+'.timePattern');
         this.tint = store.get(this.id+'.tint');
+        this.catmull = store.get(this.id+'.catmull');
 
         for(var i=0; i<this.weapons.length; i++){
             this.weapons[i].forEach(function (bullet){

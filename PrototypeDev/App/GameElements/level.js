@@ -130,7 +130,7 @@ Level.Level2.prototype.constructor = Level.Level1;
 Level.Level2.prototype.update = function() {
 	if(this.progress == 200){
 		this.game.time.events.repeat(500, 10, this.enemies[0].appear, 
-			this.enemies[0], 100, -30, 2);
+			this.enemies[0], 300, -30, 2);
 	}
 	if(this.progress == 500){
 		this.enemies[1].appear(340, -30, 100);
